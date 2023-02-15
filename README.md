@@ -3,7 +3,7 @@ This is a server that supports an app for managing reptiles via an API. Authenti
 
 ## Assignment Instructions
 1.  Create a project using Express and implement all of the endpoints to perform the required operations
-2.  Use prisma for managing your database.
+2.  Use prisma for managing your database. ([Prisma Setup](https://usu.instructure.com/courses/729048/pages/prisma-and-databases?module_item_id=5522700) | [Docs](https://www.prisma.io/docs/getting-started/quickstart))
 3.  Write the endpoints
     1.  You should follow good practices as far as code reuse goes (hint: middleware can be your friend for things like authentication)
     2.  You should follow the proper naming convention for endpoints, for example GET /reptiles should respond with all of my reptiles, and POST /schedules/:reptileId should create a schedule for a reptile.
