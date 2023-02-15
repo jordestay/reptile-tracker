@@ -1,7 +1,7 @@
 # Reptile Tracker
 This is a server that supports an app for managing reptiles via an API. Authentication is required for using the relational database.
 
-## Instructions
+## Assignment Instructions
 1.  Create a project using Express and implement all of the endpoints to perform the required operations
 2.  Use prisma for managing your database.
 3.  Write the endpoints
@@ -51,3 +51,39 @@ A **Reptile** has many **Feedings, HusbandryRecords, and Schedules** 
 - Schedule pt.2
 	- list all schedules for a user 🔐
 
+----
+## Running Local Server
+This project serves as a starting point for full-stack applications.
+
+### Database
+Create the database by running
+```bash
+yarn db:migrate
+```
+You will need the re-run this command anytime you make changes to the schema file.
+
+### Running thhe server
+Start the server by running:
+
+With yarn
+```bash
+yarn dev
+```
+
+With npm
+```bash
+npm run dev
+```
+
+## Production
+Build the project by running
+
+With yarn
+```bash
+yarn build
+```
+
+With npm
+```bash
+npm run build
+```
