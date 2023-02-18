@@ -30,7 +30,7 @@ A **User** has many **Reptiles, and Schedules.**
 
 A **Reptile** has many **Feedings, HusbandryRecords, and Schedules** 
 
-## Technical Requirements: Stories  
+### Technical Requirements: Stories  
 - User
 	- create
 	- sign in
