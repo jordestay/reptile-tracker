@@ -24,7 +24,7 @@ This is a server that supports an app for managing reptiles via an API. Authenti
 - authenticate any 🔐 story
 - authorization: no access to any data that does not directly belong to user/user's reptiles
 
-### Database relationships
+## Database relationships
 
 A **User** has many **Reptiles, and Schedules.**
 
