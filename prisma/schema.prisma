@@ -14,8 +14,21 @@ model User {
   id Int @id @default(autoincrement())
   firstName String
   lastName String
-  email String
+  email String @unique
   passwordHash String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  reptiles Reptile[]
+}
+
+model Reptile {
+  id Int @id @default(autoincrement())
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  // TODO: figure out how to restrict to 4 species
+  species String
+  name String
+  sex String
+  createdAt DateTime
+  updatedAt DateTime
 }
