@@ -24,42 +24,47 @@ model User {
 
 model Reptile {
   id Int @id @default(autoincrement())
-  user User @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id])
+  userId Int?
   // TODO: figure out how to restrict to 4 species
   species String
   name String
   // TODO: figure out how to restrict to 2 sexes
   sex String
-  createdAt DateTime
-  updatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   feeding Feeding[]
   husbandryRecord HusbandryRecord[]
   schedule Schedule[]
 }
 
 model Feeding {
-  id Int @id @default(autoincrement)
-  reptileId Reptile @relation(fields: [reptileId], references: [id]) 
+  id Int @id @default(autoincrement())
+  reptile Reptile? @relation(fields: [reptileId], references: [id]) 
+  reptileId Int?
   foodItem String
-  createdAt DateTime
-  updatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model HusbandryRecord{
   id Int @id @default(autoincrement())
-  reptileId Reptile @relation(fields: [reptileId], references: [id])
+  reptile Reptile? @relation(fields: [reptileId], references: [id])
+  reptileId Int?
   length Float
   weight Float
   temperature Float
   humidity Float
-  createdAt DateTime
-  updatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Schedule{
   id Int @id @default(autoincrement())
-  reptileId Reptile @relation(fields: [reptileId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  reptile Reptile? @relation(fields: [reptileId], references: [id])
+  reptileId Int?
+  user User? @relation(fields: [userId], references: [id])
+  userId Int?
   // TODO: figure out how to restrict to 3 types
   type String
   description String
@@ -70,6 +75,6 @@ model Schedule{
   friday Boolean
   saturday Boolean
   sunday Boolean
-  createdAt DateTime
-  updatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
