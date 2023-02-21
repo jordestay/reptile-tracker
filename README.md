@@ -1,6 +1,12 @@
 # Reptile Tracker
-I CHANGED THE README FILE FOR NATE TO SEE IF GIT PULL WORKS OR NOT.
 This is a server that supports an app for managing reptiles via an API. Authentication is required for using the relational database.
+
+## Devlog
+|Date |Time  |Ppl |Notes |
+--- | --- | --- | ---|
+|2/20/23 |1.5h |AA, CF, JT, NT |postman setup |  
+|2/17/23 |1h |AA, CF, NT |prisma setup |  
+|2/15/23 |1h |JT |initiated repo |  
 
 ## Assignment Instructions
 1.  Create a project using Express and implement all of the endpoints to perform the required operations
