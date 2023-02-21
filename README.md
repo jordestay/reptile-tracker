@@ -1,5 +1,4 @@
 # Reptile Tracker
-I CHANGED THE README FILE FOR NATE TO SEE IF GIT PULL WORKS OR NOT.
 This is a server that supports an app for managing reptiles via an API. Authentication is required for using the relational database.
 
 ## Assignment Instructions
