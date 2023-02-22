@@ -1,45 +1,3 @@
-// import express from "express";
-// import { PrismaClient } from "@prisma/client";
-
-// const client = new PrismaClient();
-// const app = express();
-// app.use(express.json());
-
-// app.get("/hello", async (req, res) => {
-//   console.log("it worked");
-
-// })
-
-// // app.post('/users', async (req, res) => {
-// //   const user = await client.user.create({
-// //     data: {
-// //       firstName: "Joseph",
-// //       lastName: "Ditton",
-// //       email: "joseph.ditton@usu.edu",
-// //       passwordHash: "q23oejklnvzlskjfdnf"
-// //     }
-// //   });
-// //   res.json({ user });
-// // });
-
-// // app.get("/users", async (req, res) => {
-// //   const users = await client.user.findMany();
-// //   res.json({ users });
-// // })
-
-// // app.get("/", (req, res) => {
-// //   res.send(`<h1>Hello, world!</h1>`);
-// // });
-
-// app.listen(3000, () => {
-//   console.log("I got started!");
-// });
-
-
-
-
-
-
 import express, { Request, RequestHandler } from "express";
 import { PrismaClient, Session, User } from "@prisma/client";
 const client = new PrismaClient();
@@ -50,13 +8,6 @@ import cookieParser from "cookie-parser";
 
 app.use(express.json());
 app.use(cookieParser());
-
-type CreateUserBody = {
-  firstName: string,
-  lastName: string,
-  email: string,
-  password: string,
-}
 
 type RequestWithSession = Request & {
   session?: Session
@@ -84,32 +35,46 @@ const authenticationMiddleware: RequestHandler = async (req: RequestWithSession,
 
 app.use(authenticationMiddleware);
 
+type CreateUserBody = {
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+}
 //sign up
 app.post('/users', async (req, res) => {
   const {firstName, lastName, email, password} = req.body as CreateUserBody;
   const passwordHash = await bcrypt.hash(password, 10);
-  const user = await client.user.create({
-    data: {
-      firstName,
-      lastName,
+  const existingUser = await client.user.findFirst({
+    where: {
       email,
-      passwordHash,
-      sessions: {
-        create: [{
-          token: uuidv4()
-        }]
-      }
-    },
-    include: {
-      sessions: true
     }
   });
-  res.cookie("session-token", user.sessions[0].token, {
-    httpOnly: true,
-    maxAge: 60000 * 10
-  });
-
-  res.json({ user });
+  if (existingUser) res.status(400).json({ message: "user already exists"});
+  else {
+    const user = await client.user.create({
+      data: {
+        firstName,
+        lastName,
+        email,
+        passwordHash,
+        sessions: {
+          create: [{
+            token: uuidv4()
+          }]
+        }
+      },
+      include: {
+        sessions: true
+      }
+    });
+    res.cookie("session-token", user.sessions[0].token, {
+      httpOnly: true,
+      maxAge: 60000 * 10
+    });
+  
+    res.json({ user });
+  }
 });
 
 type LoginBody = {
@@ -148,6 +113,8 @@ app.post("/sessions",  async (req, res) => {
     httpOnly: true,
     maxAge: 60000 * 10
   })
+
+  res.json({message: "yay you signed in"});
 });
 
 app.get("/me", async (req: RequestWithSession, res) => {
