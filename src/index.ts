@@ -13,7 +13,7 @@ app.use(cookieParser());
 //
 // ------------------------------------------ authentication -------------------------------------------------
 //
-type RequestWithSession = Request & {
+export type RequestWithSession = Request & {
   session?: Session
   user?: User
 }
@@ -137,117 +137,118 @@ app.get("/me", async (req: RequestWithSession, res) => {
   }
 })
 
+
+//------------------------------------------------------------------------------------
+//REPTILES
+
 type CreateReptile = {
   species: string,
   name: string,
   sex: string,
 }
 
-app.post('/reptiles', async (req: RequestWithSession, res) => {
-  const {species, name, sex} = req.body as CreateReptile;
+// app.post('/reptiles', async (req: RequestWithSession, res) => {
+//   const {species, name, sex} = req.body as CreateReptile;
 
-  // check that user is logged in
-  if (!req.user) {
-    res.status(401).json({ message: "unauthorized"});
-    return;
-  }
+//   // check that user is logged in
+//   if (!req.user) {
+//     res.status(401).json({ message: "unauthorized"});
+//     return;
+//   }
 
-  // make sure user puts in the needed info
-  if (!species || !name || !sex) {
-    res.status(400).json({message: "a reptile needs a specific species, name, and sex"});
-    return;
-  }
+//   // make sure user puts in the needed info
+//   if (!species || !name || !sex) {
+//     res.status(400).json({message: "a reptile needs a specific species, name, and sex"});
+//     return;
+//   }
 
-  // create requested reptile
-  const reptile = await client.reptile.create({
-    data: {
-      userId: req.user.id,
-      species,
-      name,
-      sex,
-    }
-  });
+//   // create requested reptile
+//   const reptile = await client.reptile.create({
+//     data: {
+//       userId: req.user.id,
+//       species,
+//       name,
+//       sex,
+//     }
+//   });
 
-  // return the newly created reptile
-  res.json({ reptile });
-});
+//   // return the newly created reptile
+//   res.json({ reptile });
+// });
 
-app.put('/reptiles/:id', async(req: RequestWithSession, res) => {
-  const {species, name, sex} = req.body as CreateReptile;
-  const id = Number(req.params.id);
+// app.put('/reptiles/:id', async(req: RequestWithSession, res) => {
+//   const {species, name, sex} = req.body as CreateReptile;
+//   const id = Number(req.params.id);
 
-  // check that the current user is signed in
-  if (!req.user) {
-    res.status(400).json({message: "unauthorized"});
-    return;
-  }
+//   // check that the current user is signed in
+//   if (!req.user) {
+//     res.status(400).json({message: "unauthorized"});
+//     return;
+//   }
     
-  // find the reptile in question and check that it belongs to the user
-  const oldReptile = await client.reptile.findFirst({
-    where: {
-      id,
-      userId: req.user.id,
-    }
-  })
+//   // find the reptile in question and check that it belongs to the user
+//   const oldReptile = await client.reptile.findFirst({
+//     where: {
+//       id,
+//       userId: req.user.id,
+//     }
+//   })
 
-  // check that the requested reptile even exists
-  if (!oldReptile) {
-    res.status(400).json({message: "this reptile does not exist"});
-    return;
-  }
+//   // check that the requested reptile even exists
+//   if (!oldReptile) {
+//     res.status(400).json({message: "this reptile does not exist"});
+//     return;
+//   }
 
-  // update the reptile in question
-  const reptile = await client.reptile.update({
-    where: {
-      id: oldReptile.id,
-    },
-    data: {
-      species: species || oldReptile.species,
-      name: name || oldReptile.name,
-      sex: sex || oldReptile.sex,
-    }
-  });
+//   // update the reptile in question
+//   const reptile = await client.reptile.update({
+//     where: {
+//       id: oldReptile.id,
+//     },
+//     data: {
+//       species: species || oldReptile.species,
+//       name: name || oldReptile.name,
+//       sex: sex || oldReptile.sex,
+//     }
+//   });
 
-  // return the new reptile
-  res.json({ reptile });
-});
+//   // return the new reptile
+//   res.json({ reptile });
+// });
 
+// app.delete('/reptiles/:id', async(req: RequestWithSession, res) => {
+//   const id = Number(req.params.id);
 
-
-
-app.delete('/reptiles/:id', async(req: RequestWithSession, res) => {
-  const id = Number(req.params.id);
-
-  // check that the current user is signed in
-  if (!req.user) {
-    res.status(400).json({message: "unauthorized"});
-    return;
-  }
+//   // check that the current user is signed in
+//   if (!req.user) {
+//     res.status(400).json({message: "unauthorized"});
+//     return;
+//   }
     
-  // find the reptile in question and check that it belongs to the user
-  const oldReptile = await client.reptile.findFirst({
-    where: {
-      id,
-      userId: req.user.id,
-    }
-  })
+//   // find the reptile in question and check that it belongs to the user
+//   const oldReptile = await client.reptile.findFirst({
+//     where: {
+//       id,
+//       userId: req.user.id,
+//     }
+//   })
 
-  // check that the requested reptile even exists
-  if (!oldReptile) {
-    res.status(400).json({message: "this reptile does not exist"});
-    return;
-  }
+//   // check that the requested reptile even exists
+//   if (!oldReptile) {
+//     res.status(400).json({message: "this reptile does not exist"});
+//     return;
+//   }
 
-  // update the reptile in question
-  const reptile = await client.reptile.delete({
-    where: {
-      id: oldReptile.id,
-    }
-  });
+//   // update the reptile in question
+//   const reptile = await client.reptile.delete({
+//     where: {
+//       id: oldReptile.id,
+//     }
+//   });
 
-  // return the new reptile
-  res.json({ message: "successfully deleted" });
-});
+//   // return the new reptile
+//   res.json({ message: "successfully deleted" });
+// });
 
 
 app.get('/reptiles', async(req: RequestWithSession, res) => {
