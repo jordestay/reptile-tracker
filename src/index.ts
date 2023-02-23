@@ -6,6 +6,8 @@ import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from 'uuid';
 import cookieParser from "cookie-parser";
 import { usersController } from "./controllers/users_controllers";
+import { reptilesController } from "./controllers/reptiles_controllers";
+import { feedingsController } from "./controllers/feedings_controllers";
 
 app.use(express.json());
 app.use(cookieParser());
@@ -44,6 +46,8 @@ app.use(authenticationMiddleware);
 //
 
 usersController(app, client);
+reptilesController(app, client);
+feedingsController(app, client);
 
 
 //

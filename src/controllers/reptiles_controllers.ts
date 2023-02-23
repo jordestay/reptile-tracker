@@ -144,7 +144,7 @@ export const reptilesController = controller(
   "reptiles",
   [
     { path: "/", method: "post", endpointBuilder: CreateReptile },
-    { path: "/reptile", method: "put", endpointBuilder: UpdateReptile },
+    { path: "/:id", method: "put", endpointBuilder: UpdateReptile },
     { path: "/reptile", method: "delete", endpointBuilder: DeleteReptile },
     { path: "/", method: "get", endpointBuilder: ListReptiles },
   ]
