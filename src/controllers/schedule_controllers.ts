@@ -60,13 +60,62 @@ const CreateSchedule = (client: PrismaClient): RequestHandler =>
 
   }
 
+const ListReptileSchedules = (client: PrismaClient): RequestHandler =>
+  async (req: RequestWithSession, res) => {
+    // check that the current user is signed in
+    if (!req.user) {
+      res.status(401).json({ message: "unauthorized" });
+      return;
+    }
 
+    // find the reptile in question and check that it belongs to the user
+    const reptile = await client.reptile.findMany({
+      where: {
+        userId: req.user.id
+      }
+    })
+
+    // check that the requested reptile even exists
+    if (!reptile) {
+      res.status(400).json({ message: "this reptile does not exist" });
+      return;
+    }
+
+    // check that the requested reptile has schedules
+    let reptileSchedules = reptile.schedule;
+    if (reptileSchedules.length <= 0) {
+      res.status(400).json({ message: "reptile has no schedules" });
+      return;
+    }
+
+    // return the reptile schedules
+    res.json({ reptileSchedules });
+  }
+
+  const ListUserSchedules = (client: PrismaClient): RequestHandler =>
+  async (req: RequestWithSession, res) => {
+    // check that the current user is signed in
+    if (!req.user) {
+      res.status(401).json({ message: "unauthorized" });
+      return;
+    }
+
+    // check that the requested reptile has schedules
+    let userSchedules = user.schedule;
+    if (userSchedules.length <= 0) {
+      res.status(400).json({ message: "user has no schedules" });
+      return;
+    }
+
+    // return the reptile schedules
+    res.json({ userSchedules });
+  }
 
 export const schedulesController = controller(
     "schedules",
     [
       { path: "/", method: "post", endpointBuilder: CreateSchedule },
-      //{ path: "/:reptileId", method: "get", endpointBuilder: ListReptileSchedules },
-      //{ path: "/", method: "get", endpointBuilder: ListUserSchedules },
+      { path: "/:reptileId", method: "get", endpointBuilder: ListReptileSchedules },
+      { path: "/", method: "get", endpointBuilder: ListUserSchedules },
     ]
   )
