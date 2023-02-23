@@ -5,7 +5,7 @@ const app = express();
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from 'uuid';
 import cookieParser from "cookie-parser";
-import createServer from "connect";
+import { usersController } from "./controllers/users_controllers";
 
 app.use(express.json());
 app.use(cookieParser());
@@ -39,51 +39,57 @@ const authenticationMiddleware: RequestHandler = async (req: RequestWithSession,
 
 app.use(authenticationMiddleware);
 
+//
+// -------------------------------------- controllers ---------------------------------------------------
+//
+
+usersController(app, client);
+
 
 //
 // -------------------------------------- sign up -------------------------------------------------------------
 //
-type CreateUserBody = {
-  firstName: string,
-  lastName: string,
-  email: string,
-  password: string,
-}
+// type CreateUserBody = {
+//   firstName: string,
+//   lastName: string,
+//   email: string,
+//   password: string,
+// }
 
-app.post('/users', async (req, res) => {
-  const {firstName, lastName, email, password} = req.body as CreateUserBody;
-  const passwordHash = await bcrypt.hash(password, 10);
-  const existingUser = await client.user.findFirst({
-    where: {
-      email,
-    }
-  });
-  if (existingUser) res.status(400).json({ message: "user already exists"});
-  else {
-    const user = await client.user.create({
-      data: {
-        firstName,
-        lastName,
-        email,
-        passwordHash,
-        sessions: {
-          create: [{
-            token: uuidv4()
-          }]
-        }
-      },
-      include: {
-        sessions: true
-      }
-    });
-    res.cookie("session-token", user.sessions[0].token, {
-      httpOnly: true,
-      maxAge: 60000 * 10
-    });
+// app.post('/users', async (req, res) => {
+//   const {firstName, lastName, email, password} = req.body as CreateUserBody;
+//   const passwordHash = await bcrypt.hash(password, 10);
+//   const existingUser = await client.user.findFirst({
+//     where: {
+//       email,
+//     }
+//   });
+//   if (existingUser) res.status(400).json({ message: "user already exists"});
+//   else {
+//     const user = await client.user.create({
+//       data: {
+//         firstName,
+//         lastName,
+//         email,
+//         passwordHash,
+//         sessions: {
+//           create: [{
+//             token: uuidv4()
+//           }]
+//         }
+//       },
+//       include: {
+//         sessions: true
+//       }
+//     });
+//     res.cookie("session-token", user.sessions[0].token, {
+//       httpOnly: true,
+//       maxAge: 60000 * 10
+//     });
   
-    res.json({ user });
-  }
-});
+//     res.json({ user });
+//   }
+// });
 
 type LoginBody = {
   email: string,
@@ -129,23 +135,23 @@ app.post("/sessions",  async (req, res) => {
   res.json({user});
 });
 
-app.get("/me", async (req: RequestWithSession, res) => {
-  if (req.session) {
-    res.json({ user: req.user });
-  } else {
-    res.status(401).json({ message: "unauthorized"});
-  }
-})
+// app.get("/me", async (req: RequestWithSession, res) => {
+//   if (req.session) {
+//     res.json({ user: req.user });
+//   } else {
+//     res.status(401).json({ message: "unauthorized"});
+//   }
+// })
 
 
 //------------------------------------------------------------------------------------
 //REPTILES
 
-type CreateReptile = {
-  species: string,
-  name: string,
-  sex: string,
-}
+// type CreateReptile = {
+//   species: string,
+//   name: string,
+//   sex: string,
+// }
 
 // app.post('/reptiles', async (req: RequestWithSession, res) => {
 //   const {species, name, sex} = req.body as CreateReptile;
@@ -251,29 +257,29 @@ type CreateReptile = {
 // });
 
 
-app.get('/reptiles', async(req: RequestWithSession, res) => {
-  // check that the current user is signed in
-  if (!req.user) {
-    res.status(400).json({message: "unauthorized"});
-    return;
-  }
+// app.get('/reptiles', async(req: RequestWithSession, res) => {
+//   // check that the current user is signed in
+//   if (!req.user) {
+//     res.status(400).json({message: "unauthorized"});
+//     return;
+//   }
     
-  // find the reptile in question and check that it belongs to the user
-  const reptiles = await client.reptile.findMany({
-    where: {
-      userId: req.user.id
-    }
-  })
+//   // find the reptile in question and check that it belongs to the user
+//   const reptiles = await client.reptile.findMany({
+//     where: {
+//       userId: req.user.id
+//     }
+//   })
 
-  // check that the requested reptile even exists
-  if (!reptiles) {
-    res.status(400).json({message: "user has no reptiles"});
-    return;
-  }
+//   // check that the requested reptile even exists
+//   if (!reptiles) {
+//     res.status(400).json({message: "user has no reptiles"});
+//     return;
+//   }
 
-  // return the new reptile
-  res.json({ reptiles });
-});
+//   // return the new reptile
+//   res.json({ reptiles });
+// });
 
 app.get("/", (req, res) => {
   res.send(`<h1>Hello, world!</h1>`);
