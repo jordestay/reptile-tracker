@@ -33,9 +33,9 @@ This is a server that supports an app for managing reptiles via an API. Authenti
 
 ## Database relationships
 
-A **User** has many **Reptiles, and Schedules.**
+A **User** has many **Reptiles, and Schedules.**
 
-A **Reptile** has many **Feedings, HusbandryRecords, and Schedules** 
+A **Reptile** has many **Feedings, HusbandryRecords, and Schedules** 
 
 ## Technical Requirements: Stories  
 - User
@@ -94,3 +94,17 @@ With npm
 ```bash
 npm run build
 ```
+Footer
+© 2023 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
