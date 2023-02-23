@@ -4,10 +4,10 @@ import { controller } from "../lib/controller";
 import { RequestWithSession } from "..";
 
 type HusbandryReptile = {
-  length: GLfloat,
-  weight: GLfloat,
-  temperature: GLfloat,
-  humidity: GLfloat,
+  length: number,
+  weight: number,
+  temperature: number,
+  humidity: number,
 }
 
 const CreateHusbandry = (client: PrismaClient): RequestHandler =>
@@ -22,8 +22,20 @@ const CreateHusbandry = (client: PrismaClient): RequestHandler =>
     }
 
     // make sure user puts in the needed info
-    if (!length || !weight || !temperature || !humidity){
-      res.status(400).json({ message: "a reptile needs a specific length, weight, tempeature, humidity" });
+    if (!length || !weight || !temperature || !humidity) {
+      res.status(400).json({ message: "a reptile needs a specific length, weight, temperature, and humidity" });
+      return;
+    }
+
+    // check that reptile exists
+    const reptile = await client.reptile.findFirst({
+      where: {
+        id
+      }
+    })
+
+    if (!reptile) {
+      res.status(400).json({ message: "this reptile doesn't exist" });
       return;
     }
 
@@ -38,17 +50,29 @@ const CreateHusbandry = (client: PrismaClient): RequestHandler =>
       }
     });
 
-    // return the newly created reptile
+    // return the newly created husbandry
     res.json({ husbandry });
   }
 
-  const ListHusbandries = (client: PrismaClient): RequestHandler =>
+const ListHusbandries = (client: PrismaClient): RequestHandler =>
   async (req: RequestWithSession, res) => {
     const id = Number(req.params.id);
 
     // check that the current user is signed in
     if (!req.user) {
-      res.status(400).json({ message: "unauthorized" });
+      res.status(401).json({ message: "unauthorized" });
+      return;
+    }
+
+    // check that reptile exists
+    const reptile = await client.reptile.findFirst({
+      where: {
+        id
+      }
+    })
+
+    if (!reptile) {
+      res.status(400).json({ message: "this reptile doesn't exist" });
       return;
     }
 
@@ -69,10 +93,10 @@ const CreateHusbandry = (client: PrismaClient): RequestHandler =>
     res.json({ husbandries });
   }
 
-  export const husbandriesController = controller(
-    "husbandry",
-    [
-      { path: "/:id", method: "post", endpointBuilder: CreateHusbandry },
-      { path: "/:id", method: "get", endpointBuilder: ListHusbandries },
-    ]
-  )
+export const husbandriesController = controller(
+  "husbandries",
+  [
+    { path: "/:id", method: "post", endpointBuilder: CreateHusbandry },
+    { path: "/:id", method: "get", endpointBuilder: ListHusbandries },
+  ]
+)

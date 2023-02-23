@@ -28,7 +28,13 @@ const CreateSchedule = (client: PrismaClient): RequestHandler =>
 
     // make sure user puts in the needed info
     if (!type || !description || !monday || !tuesday || !wednesday || !thursday || !friday || !saturday || !sunday) {
-      res.status(401).json({ message: "the schedule needs a specific type, description and days of the week" });
+      res.status(400).json({ message: "the schedule needs a specific type, description, and days of the week" });
+      return;
+    }
+
+    // check type constraints
+    if (!(["feed", "record", "clean"].includes(type))) {
+      res.status(400).json({ message: "the schedule's type must be one of the following: feed, record, or clean" });
       return;
     }
 

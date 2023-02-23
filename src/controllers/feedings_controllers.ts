@@ -24,7 +24,19 @@ const CreateFeeding = (client: PrismaClient): RequestHandler =>
       return;
     }
 
-    // create requested reptile
+    // check that reptile exists
+    const reptile = await client.reptile.findFirst({
+      where: {
+        id
+      }
+    })
+
+    if (!reptile) {
+      res.status(400).json({ message: "this reptile doesn't exist" });
+      return;
+    }
+
+    // create requested feeding
     const feeding = await client.feeding.create({
       data: {
         foodItem,
@@ -42,7 +54,19 @@ const CreateFeeding = (client: PrismaClient): RequestHandler =>
 
     // check that the current user is signed in
     if (!req.user) {
-      res.status(400).json({ message: "unauthorized" });
+      res.status(401).json({ message: "unauthorized" });
+      return;
+    }
+
+    // check that reptile exists
+    const reptile = await client.reptile.findFirst({
+      where: {
+        id
+      }
+    })
+
+    if (!reptile) {
+      res.status(400).json({ message: "this reptile doesn't exist" });
       return;
     }
 

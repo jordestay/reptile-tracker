@@ -137,7 +137,7 @@ app.post("/sessions",  async (req, res) => {
 
   res.cookie("session-token", session.token, {
     httpOnly: true,
-    maxAge: 60000 * 10
+    maxAge: 60000 * 30
   })
 
   res.json({user});
@@ -290,9 +290,13 @@ app.post("/sessions",  async (req, res) => {
 // });
 
 app.get("/", (req, res) => {
-  res.send(`<h1>Hello, world!</h1>`);
+  res.status(404).send(`<h1>Welcome to Reptile Tracker!</h1>`);
 });
 
-app.listen(3000, () => {
-  console.log("I got started!");
+app.get("/:anything", (req, res) => {
+  res.status(404).send(`<h1>Page not found</h1>`);
+});
+
+app.listen(parseInt(process.env.PORT || "3000"), () => {
+  console.log(`App running on port ${process.env.PORT || "3000"}`);
 });
