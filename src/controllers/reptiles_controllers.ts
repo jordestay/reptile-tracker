@@ -3,7 +3,7 @@ import { Express, RequestHandler } from "express";
 import { controller } from "../lib/controller";
 import { RequestWithSession } from "..";
 
-type CreateReptile = {
+type CreateReptileBody = {
   species: string,
   name: string,
   sex: string,
@@ -11,7 +11,7 @@ type CreateReptile = {
 
 const CreateReptile = (client: PrismaClient): RequestHandler =>
   async (req: RequestWithSession, res) => {
-    const { species, name, sex } = req.body as CreateReptile;
+    const { species, name, sex } = req.body as CreateReptileBody;
 
     // check that user is logged in
     if (!req.user) {
@@ -22,6 +22,18 @@ const CreateReptile = (client: PrismaClient): RequestHandler =>
     // make sure user puts in the needed info
     if (!species || !name || !sex) {
       res.status(400).json({ message: "a reptile needs a specific species, name, and sex" });
+      return;
+    }
+
+    // check species type
+    if (!(["ball_python", "king_snake", "corn_snake", "redtail_boa"].includes(species))) {
+      res.status(400).json({ message: "a reptile's species must one of the following: ball_python, king_snake, corn_snake, or redtail_boa"});
+      return;
+    }
+
+    // check sex type
+    if (!(["m","f"].includes(sex))) {
+      res.status(400).json({ message: "a reptile's sex must one of the following: m or f"});
       return;
     }
 
@@ -41,7 +53,7 @@ const CreateReptile = (client: PrismaClient): RequestHandler =>
 
 const UpdateReptile = (client: PrismaClient): RequestHandler =>
   async (req: RequestWithSession, res) => {
-    const { species, name, sex } = req.body as CreateReptile;
+    const { species, name, sex } = req.body as CreateReptileBody;
     const id = Number(req.params.id);
 
     // check that the current user is signed in
@@ -86,7 +98,7 @@ const DeleteReptile = (client: PrismaClient): RequestHandler =>
 
     // check that the current user is signed in
     if (!req.user) {
-      res.status(400).json({ message: "unauthorized" });
+      res.status(401).json({ message: "unauthorized" });
       return;
     }
 
@@ -119,7 +131,7 @@ const ListReptiles = (client: PrismaClient): RequestHandler =>
   async (req: RequestWithSession, res) => {
     // check that the current user is signed in
     if (!req.user) {
-      res.status(400).json({ message: "unauthorized" });
+      res.status(401).json({ message: "unauthorized" });
       return;
     }
 
@@ -145,7 +157,7 @@ export const reptilesController = controller(
   [
     { path: "/", method: "post", endpointBuilder: CreateReptile },
     { path: "/:id", method: "put", endpointBuilder: UpdateReptile },
-    { path: "/reptile", method: "delete", endpointBuilder: DeleteReptile },
+    { path: "/:id", method: "delete", endpointBuilder: DeleteReptile },
     { path: "/", method: "get", endpointBuilder: ListReptiles },
   ]
 )

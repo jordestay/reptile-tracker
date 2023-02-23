@@ -51,7 +51,7 @@ const createUser = (client: PrismaClient): RequestHandler =>
     });
     res.cookie("session-token", user.sessions[0].token, {
       httpOnly: true,
-      maxAge: 60000 * 10
+      maxAge: 60000 * 30
     });
   
     res.json({ user });
