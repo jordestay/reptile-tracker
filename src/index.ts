@@ -8,6 +8,8 @@ import cookieParser from "cookie-parser";
 import { usersController } from "./controllers/users_controllers";
 import { reptilesController } from "./controllers/reptiles_controllers";
 import { feedingsController } from "./controllers/feedings_controllers";
+import { husbandriesController } from "./controllers/husbandry_controllers";
+//import { schedulesController } from "./controllers/schedule_controllers";
 
 app.use(express.json());
 app.use(cookieParser());
@@ -48,6 +50,8 @@ app.use(authenticationMiddleware);
 usersController(app, client);
 reptilesController(app, client);
 feedingsController(app, client);
+husbandriesController(app, client);
+//schedulesController(app, client);
 
 
 //
