@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Express, RequestHandler } from "express";
-import { RequestWithJWTBody } from "../dto/jwt";
+import { RequestWithJWTBody } from "../dto/session";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from 'uuid';
 import { controller } from "../lib/controller";
@@ -63,6 +63,6 @@ export const usersController = controller(
   "users",
   [
     { path: "/user", endpointBuilder: getMe, method: "get" },
-    { path: "/", method: "post", endpointBuilder: createUser, skipAuth: true }
+    { path: "/", method: "post", endpointBuilder: createUser }
   ]
 )
