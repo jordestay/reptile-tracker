@@ -10,6 +10,9 @@ import createServer from "connect";
 app.use(express.json());
 app.use(cookieParser());
 
+//
+// ------------------------------------------ authentication -------------------------------------------------
+//
 type RequestWithSession = Request & {
   session?: Session
   user?: User
@@ -36,13 +39,17 @@ const authenticationMiddleware: RequestHandler = async (req: RequestWithSession,
 
 app.use(authenticationMiddleware);
 
+
+//
+// -------------------------------------- sign up -------------------------------------------------------------
+//
 type CreateUserBody = {
   firstName: string,
   lastName: string,
   email: string,
   password: string,
 }
-//sign up
+
 app.post('/users', async (req, res) => {
   const {firstName, lastName, email, password} = req.body as CreateUserBody;
   const passwordHash = await bcrypt.hash(password, 10);
@@ -205,9 +212,10 @@ app.put('/reptiles/:id', async(req: RequestWithSession, res) => {
   res.json({ reptile });
 });
 
-// TODO: modify this for deleting a reptile
+
+
+
 app.delete('/reptiles/:id', async(req: RequestWithSession, res) => {
-  const {species, name, sex} = req.body as CreateReptile;
   const id = Number(req.params.id);
 
   // check that the current user is signed in
@@ -231,19 +239,39 @@ app.delete('/reptiles/:id', async(req: RequestWithSession, res) => {
   }
 
   // update the reptile in question
-  const reptile = await client.reptile.update({
+  const reptile = await client.reptile.delete({
     where: {
       id: oldReptile.id,
-    },
-    data: {
-      species: species || oldReptile.species,
-      name: name || oldReptile.name,
-      sex: sex || oldReptile.sex,
     }
   });
 
   // return the new reptile
-  res.json({ reptile });
+  res.json({ message: "successfully deleted" });
+});
+
+
+app.get('/reptiles', async(req: RequestWithSession, res) => {
+  // check that the current user is signed in
+  if (!req.user) {
+    res.status(400).json({message: "unauthorized"});
+    return;
+  }
+    
+  // find the reptile in question and check that it belongs to the user
+  const reptiles = await client.reptile.findMany({
+    where: {
+      userId: req.user.id
+    }
+  })
+
+  // check that the requested reptile even exists
+  if (!reptiles) {
+    res.status(400).json({message: "user has no reptiles"});
+    return;
+  }
+
+  // return the new reptile
+  res.json({ reptiles });
 });
 
 app.get("/", (req, res) => {
