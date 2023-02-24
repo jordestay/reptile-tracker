@@ -3,7 +3,10 @@ import { Express, RequestHandler } from "express";
 import { controller } from "../lib/controller";
 import { RequestWithSession } from "..";
 
-type HusbandryReptile = {
+//
+// --------------------------------------------------- Create a Husbandry -------------------------------------------------------
+//
+type CreateHusbandryBody = {
   length: number,
   weight: number,
   temperature: number,
@@ -12,30 +15,42 @@ type HusbandryReptile = {
 
 const CreateHusbandry = (client: PrismaClient): RequestHandler =>
   async (req: RequestWithSession, res) => {
-    const { length, weight, temperature, humidity } = req.body as HusbandryReptile;
-    const id = Number(req.params.id);
+    const { length, weight, temperature, humidity } = req.body as CreateHusbandryBody;
+    const id = Number(req.params.reptileId);
 
     // check that user is logged in
     if (!req.user) {
-      res.status(401).json({ message: "unauthorized" });
+      res.status(401).json({ message: "Unauthorized." });
       return;
     }
 
     // make sure user puts in the needed info
     if (!length || !weight || !temperature || !humidity) {
-      res.status(400).json({ message: "a reptile needs a specific length, weight, temperature, and humidity" });
+      res.status(400).json({ message: "A reptile needs a specific length, weight, temperature, and humidity." });
+      return;
+    }
+
+    // validate input
+    if (
+      typeof length !== "number" ||
+      typeof weight !== "number" ||
+      typeof temperature !== "number" ||
+      typeof humidity !== "number"
+    ) {
+      res.status(400).json({ message: "Husbandry length, weight, temperature, and humidity must be numbers." });
       return;
     }
 
     // check that reptile exists
     const reptile = await client.reptile.findFirst({
       where: {
-        id
+        id,
+        userId: req.user.id,
       }
     })
 
     if (!reptile) {
-      res.status(400).json({ message: "this reptile doesn't exist" });
+      res.status(400).json({ message: "This reptile doesn't exist." });
       return;
     }
 
@@ -50,53 +65,57 @@ const CreateHusbandry = (client: PrismaClient): RequestHandler =>
       }
     });
 
-    // return the newly created husbandry
-    res.json({ husbandry });
+    res.json({ message: "Husbandry created." });
   }
 
+
+//
+// ------------------------------------------------------- List Husbandries ----------------------------------------------------
+//
 const ListHusbandries = (client: PrismaClient): RequestHandler =>
   async (req: RequestWithSession, res) => {
-    const id = Number(req.params.id);
+    const id = Number(req.params.reptileId);
 
     // check that the current user is signed in
     if (!req.user) {
-      res.status(401).json({ message: "unauthorized" });
+      res.status(401).json({ message: "Unauthorized." });
       return;
     }
 
     // check that reptile exists
     const reptile = await client.reptile.findFirst({
       where: {
-        id
+        id,
+        userId: req.user.id,
       }
     })
 
     if (!reptile) {
-      res.status(400).json({ message: "this reptile doesn't exist" });
+      res.status(400).json({ message: "This reptile doesn't exist." });
       return;
     }
 
-    // find the reptile in question and check that it belongs to the user
     const husbandries = await client.husbandryRecord.findMany({
       where: {
         reptileId: id
       }
     })
 
-    // check that the requested reptile even exists
+    // check that the reptile has husbandries
     if (!husbandries) {
-      res.status(400).json({ message: "reptile has no feedings" });
+      res.status(400).json({ message: "Reptile has no husbandries." });
       return;
     }
 
-    // return the new reptile
     res.json({ husbandries });
   }
+
+
 
 export const husbandriesController = controller(
   "husbandries",
   [
-    { path: "/:id", method: "post", endpointBuilder: CreateHusbandry },
-    { path: "/:id", method: "get", endpointBuilder: ListHusbandries },
+    { path: "/:reptileId", method: "post", endpointBuilder: CreateHusbandry },
+    { path: "/:reptileId", method: "get", endpointBuilder: ListHusbandries },
   ]
 )

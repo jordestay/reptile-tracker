@@ -34,10 +34,8 @@ model Reptile {
   id Int @id @default(autoincrement())
   user User @relation(fields: [userId], references: [id])
   userId Int
-  // TODO: figure out how to restrict to 4 species
   species String
   name String
-  // TODO: figure out how to restrict to 2 sexes
   sex String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -73,7 +71,6 @@ model Schedule{
   reptileId Int
   user User @relation(fields: [userId], references: [id])
   userId Int
-  // TODO: figure out how to restrict to 3 types
   type String
   description String
   monday Boolean
