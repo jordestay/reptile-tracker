@@ -4,6 +4,7 @@ This is a server that supports an app for managing reptiles via an API. Authenti
 ## Devlog
 |Date |Time  |Ppl |Notes |
 --- | --- | --- | ---|
+|2/23/23 |1.5h |NT |fixed bugs in schedules controller and tested endpoints |
 |2/22/23 |1.5h |NT |minor tweaks and postman testing |
 |2/22/23 |3h |AA, CF, NT |controller setup and some testing |
 |2/21/23 |2h |NT |user authentication and reptile manipulation functionality | 

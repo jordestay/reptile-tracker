@@ -9,13 +9,13 @@ import { usersController } from "./controllers/users_controllers";
 import { reptilesController } from "./controllers/reptiles_controllers";
 import { feedingsController } from "./controllers/feedings_controllers";
 import { husbandriesController } from "./controllers/husbandry_controllers";
-//import { schedulesController } from "./controllers/schedule_controllers";
+import { schedulesController } from "./controllers/schedule_controllers";
 
 app.use(express.json());
 app.use(cookieParser());
 
 //
-// ------------------------------------------ authentication -------------------------------------------------
+// ------------------------------------------ Authentication -------------------------------------------------
 //
 export type RequestWithSession = Request & {
   session?: Session
@@ -44,89 +44,49 @@ const authenticationMiddleware: RequestHandler = async (req: RequestWithSession,
 app.use(authenticationMiddleware);
 
 //
-// -------------------------------------- controllers ---------------------------------------------------
+// ---------------------------------------------- Controllers ---------------------------------------------------
 //
-
 usersController(app, client);
 reptilesController(app, client);
 feedingsController(app, client);
 husbandriesController(app, client);
-//schedulesController(app, client);
-
+schedulesController(app, client);
 
 //
-// -------------------------------------- sign up -------------------------------------------------------------
+// ------------------------------------------------- Login -----------------------------------------------------
 //
-// type CreateUserBody = {
-//   firstName: string,
-//   lastName: string,
-//   email: string,
-//   password: string,
-// }
-
-// app.post('/users', async (req, res) => {
-//   const {firstName, lastName, email, password} = req.body as CreateUserBody;
-//   const passwordHash = await bcrypt.hash(password, 10);
-//   const existingUser = await client.user.findFirst({
-//     where: {
-//       email,
-//     }
-//   });
-//   if (existingUser) res.status(400).json({ message: "user already exists"});
-//   else {
-//     const user = await client.user.create({
-//       data: {
-//         firstName,
-//         lastName,
-//         email,
-//         passwordHash,
-//         sessions: {
-//           create: [{
-//             token: uuidv4()
-//           }]
-//         }
-//       },
-//       include: {
-//         sessions: true
-//       }
-//     });
-//     res.cookie("session-token", user.sessions[0].token, {
-//       httpOnly: true,
-//       maxAge: 60000 * 10
-//     });
-  
-//     res.json({ user });
-//   }
-// });
-
 type LoginBody = {
   email: string,
   password: string
 }
 
-// log in
-app.post("/sessions",  async (req, res) => {
-  const {email, password} = req.body as LoginBody;
+app.post("/sessions", async (req, res) => {
+  const { email, password } = req.body as LoginBody;
+
   const user = await client.user.findFirst({
     where: {
       email,
     },
-    include: {
-      sessions: true,
-      reptiles: true
-    }
+    // include: {
+    //   sessions: true,
+    //   reptiles: true
+    // }
   });
+
+  // check that user with given email exists
   if (!user) {
     res.status(404).json({ message: "Invalid email or password" });
     return;
   }
 
+  // check password validity
   const isValid = await bcrypt.compare(password, user.passwordHash);
   if (!isValid) {
     res.status(404).json({ message: "Invalid email or password" });
     return;
   }
 
+  // create a session
   const token = uuidv4();
   const session = await client.session.create({
     data: {
@@ -135,162 +95,31 @@ app.post("/sessions",  async (req, res) => {
     }
   })
 
+  // return the session cookie to the user
   res.cookie("session-token", session.token, {
     httpOnly: true,
     maxAge: 60000 * 30
   })
 
-  res.json({user});
+  res.json({ message: "Successfully logged in." });
 });
 
-// app.get("/me", async (req: RequestWithSession, res) => {
-//   if (req.session) {
-//     res.json({ user: req.user });
-//   } else {
-//     res.status(401).json({ message: "unauthorized"});
-//   }
-// })
 
-
-//------------------------------------------------------------------------------------
-//REPTILES
-
-// type CreateReptile = {
-//   species: string,
-//   name: string,
-//   sex: string,
-// }
-
-// app.post('/reptiles', async (req: RequestWithSession, res) => {
-//   const {species, name, sex} = req.body as CreateReptile;
-
-//   // check that user is logged in
-//   if (!req.user) {
-//     res.status(401).json({ message: "unauthorized"});
-//     return;
-//   }
-
-//   // make sure user puts in the needed info
-//   if (!species || !name || !sex) {
-//     res.status(400).json({message: "a reptile needs a specific species, name, and sex"});
-//     return;
-//   }
-
-//   // create requested reptile
-//   const reptile = await client.reptile.create({
-//     data: {
-//       userId: req.user.id,
-//       species,
-//       name,
-//       sex,
-//     }
-//   });
-
-//   // return the newly created reptile
-//   res.json({ reptile });
-// });
-
-// app.put('/reptiles/:id', async(req: RequestWithSession, res) => {
-//   const {species, name, sex} = req.body as CreateReptile;
-//   const id = Number(req.params.id);
-
-//   // check that the current user is signed in
-//   if (!req.user) {
-//     res.status(400).json({message: "unauthorized"});
-//     return;
-//   }
-    
-//   // find the reptile in question and check that it belongs to the user
-//   const oldReptile = await client.reptile.findFirst({
-//     where: {
-//       id,
-//       userId: req.user.id,
-//     }
-//   })
-
-//   // check that the requested reptile even exists
-//   if (!oldReptile) {
-//     res.status(400).json({message: "this reptile does not exist"});
-//     return;
-//   }
-
-//   // update the reptile in question
-//   const reptile = await client.reptile.update({
-//     where: {
-//       id: oldReptile.id,
-//     },
-//     data: {
-//       species: species || oldReptile.species,
-//       name: name || oldReptile.name,
-//       sex: sex || oldReptile.sex,
-//     }
-//   });
-
-//   // return the new reptile
-//   res.json({ reptile });
-// });
-
-// app.delete('/reptiles/:id', async(req: RequestWithSession, res) => {
-//   const id = Number(req.params.id);
-
-//   // check that the current user is signed in
-//   if (!req.user) {
-//     res.status(400).json({message: "unauthorized"});
-//     return;
-//   }
-    
-//   // find the reptile in question and check that it belongs to the user
-//   const oldReptile = await client.reptile.findFirst({
-//     where: {
-//       id,
-//       userId: req.user.id,
-//     }
-//   })
-
-//   // check that the requested reptile even exists
-//   if (!oldReptile) {
-//     res.status(400).json({message: "this reptile does not exist"});
-//     return;
-//   }
-
-//   // update the reptile in question
-//   const reptile = await client.reptile.delete({
-//     where: {
-//       id: oldReptile.id,
-//     }
-//   });
-
-//   // return the new reptile
-//   res.json({ message: "successfully deleted" });
-// });
-
-
-// app.get('/reptiles', async(req: RequestWithSession, res) => {
-//   // check that the current user is signed in
-//   if (!req.user) {
-//     res.status(400).json({message: "unauthorized"});
-//     return;
-//   }
-    
-//   // find the reptile in question and check that it belongs to the user
-//   const reptiles = await client.reptile.findMany({
-//     where: {
-//       userId: req.user.id
-//     }
-//   })
-
-//   // check that the requested reptile even exists
-//   if (!reptiles) {
-//     res.status(400).json({message: "user has no reptiles"});
-//     return;
-//   }
-
-//   // return the new reptile
-//   res.json({ reptiles });
-// });
 
 app.get("/", (req, res) => {
   res.status(404).send(`<h1>Welcome to Reptile Tracker!</h1>`);
+});
+
+app.post("/:anything", (req, res) => {
+  res.status(400).send({ message: "Bad request." });
+});
+
+app.put("/:anything", (req, res) => {
+  res.status(400).send({ message: "Bad request." });
+});
+
+app.delete("/:anything", (req, res) => {
+  res.status(400).send({ message: "Bad request." });
 });
 
 app.get("/:anything", (req, res) => {
