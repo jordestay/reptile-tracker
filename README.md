@@ -4,6 +4,7 @@ This is a server that supports an app for managing reptiles via an API. Authenti
 ## Devlog
 |Date |Time  |Ppl |Notes |
 --- | --- | --- | ---|
+|3/11/23 |1h |JT |created base SPA layout |
 |2/23/23 |1.5h |NT |fixed bugs in schedules controller and tested endpoints |
 |2/22/23 |1.5h |JT |added scheduling controllers for Reptiles and Users |
 |2/22/23 |1.5h |NT |minor tweaks and postman testing |

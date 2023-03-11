@@ -7,10 +7,12 @@ able to do the following:
 - I should be able to navigate to the Login page
 - I should be able to navigate to the Signup page
 */
-import { LoginPage } from './LoginPage'
-import { SignupPage } from './SignupPage'
+import { Login } from "./pages/Login";
+import { Signup } from "./pages/Signup";
 
-export const HomePage = () => {
+export const Home = () => {
+  // const [pageName, setPage] = useState("toasts");
+  // console.log(pageName);
   return (
     <div>
       <h1>Reptile Tracker</h1>
@@ -21,8 +23,14 @@ export const HomePage = () => {
         aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
         in voluptate velit eu fugiat nulla pariatur.
       </p>
-      <button onClick={() => setPageName("login")}>Login</button>
-      <button onClick={() => setPageName("signup")}>Signup</button>
+      {/* <div>
+      <button onClick={() => setPage("login")}>Login</button>
+      <button onClick={() => setPage("signup")}>Signup</button>
+      <div>
+        {pageName === "login" && <Login />}
+        {pageName === "signup" && <Signup />}
+      </div>
+    </div> */}
     </div>
   );
 };

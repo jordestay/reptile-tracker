@@ -1,25 +1,50 @@
-import { useState } from 'react'
-import { HomePage } from './HomePage'
-import { DashboardPage } from './DashboardPage'
-import { ReptilePage } from './ReptilePage'
+import { useEffect, useState } from "react";
+import { Home } from "./pages/Home";
+import { Login } from "./pages/Login";
+import { Signup } from "./pages/Signup";
+import { Dashboard } from "./pages/Dashboard";
+import { Reptile } from "./pages/Reptile";
 
-export const App = () => {
-  const [pageName, setPageName] = useState("toasts");
-  console.log(pageName);
+function Router() {
+  const [page, setPage] = useState(window.location.hash.replace("#", ""));
+
+  // this synchronizes the application state with the browser location state
+  useEffect(() => {
+    window.location.hash = page;
+  }, [page]);
+
+  // this synchronizes the browser location state with our application state
+  useEffect(() => {
+    const hashChange = () => {
+      setPage(window.location.hash.replace("#", ""));
+    };
+    window.addEventListener("hashchange", hashChange);
+
+    return () => {
+      window.removeEventListener("hashchange", hashChange);
+    };
+  }, []);
+
+  // dynamically select which page to render based on application state
+  let component = <div>Not found</div>;
+  if (page === "home") component = <Home />;
+  else if (page === "login") component = <Login />;
+  else if (page === "signup") component = <Signup />;
+  else if (page === "dashboard") component = <Dashboard />;
+  else if (page === "reptile") component = <Reptile />;
+
   return (
     <div>
-      <button onClick={() => setPageName("home")}>Home</button>
-      <button onClick={() => setPageName("login")}>Login</button>
-      <button onClick={() => setPageName("signup")}>Signup</button>
-      <button onClick={() => setPageName("dashboard")}>Dashboard</button>
-      <button onClick={() => setPageName("reptile")}>Reptile</button>
-      <div>
-        {pageName === "home" && <HomePage />}
-        {pageName === "login" && <LoginPage />}
-        {pageName === "signup" && <SignupPage />}
-        {pageName === "dashboard" && <DashboardPage />}
-        {pageName === "reptile" && <ReptilePage />}
-      </div>
+      <nav>
+        <button onClick={() => setPage("home")}>Home</button>
+        <button onClick={() => setPage("login")}>Login</button>
+        <button onClick={() => setPage("signup")}>Signup</button>
+        <button onClick={() => setPage("dashboard")}>Dashboard</button>
+        <button onClick={() => setPage("reptile")}>Reptile</button>
+      </nav>
+      {component}
     </div>
-  )
+  );
 }
+
+export default Router;
