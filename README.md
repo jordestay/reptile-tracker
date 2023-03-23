@@ -7,11 +7,32 @@ A **User** has many **Reptiles, and Schedules.**
 
 A **Reptile** has many **Feedings, HusbandryRecords, and Schedules** 
 
+### Install dependencies
+Install any necessary dependencies by running
+
+With yarn
+```bash
+yarn
+```
+
+with npm
+```bash
+npm install
+```
+
 ### Database
 Create the database by running
+
+With yarn
 ```bash
 yarn db:migrate
 ```
+
+With npm
+```bash
+npm run migrate
+```
+
 You will need the re-run this command anytime you make changes to the schema file.
 
 ### Running the server
