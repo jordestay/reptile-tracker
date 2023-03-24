@@ -10,9 +10,13 @@ import { reptilesController } from "./controllers/reptiles_controllers";
 import { feedingsController } from "./controllers/feedings_controllers";
 import { husbandriesController } from "./controllers/husbandry_controllers";
 import { schedulesController } from "./controllers/schedule_controllers";
+import cors from 'cors';
+
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
+
 
 //
 // ------------------------------------------ Authentication -------------------------------------------------
@@ -107,7 +111,8 @@ app.post("/sessions", async (req, res) => {
 
 
 app.get("/", (req, res) => {
-  res.status(404).send(`<h1>Welcome to Reptile Tracker!</h1>`);
+  // res.status(404).send(`<h1>Welcome to Reptile Tracker!</h1>`);
+  res.status(401).send({ message: "unauthorized" });
 });
 
 app.post("/:anything", (req, res) => {

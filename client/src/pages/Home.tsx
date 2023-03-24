@@ -7,12 +7,41 @@ able to do the following:
 - I should be able to navigate to the Login page
 - I should be able to navigate to the Signup page
 */
-import { Login } from "./pages/Login";
-import { Signup } from "./pages/Signup";
+import { useEffect } from "react";
+import { Login } from "./Login";
+import { Signup } from "./Signup";
+import { useApi } from "../hooks/useApi";
 
 export const Home = () => {
+  const api = useApi();
+
   // const [pageName, setPage] = useState("toasts");
   // console.log(pageName);
+
+  async function authenticate() {
+    // const result = await fetch(`localhost:3000/`, {
+    //   // method: 'post',
+    //   // headers: {
+    //   //   "Content-Type": "application/json"
+    //   // },
+    //   credentials: "include",
+    //   // body: JSON.stringify(body)
+    // });
+
+    const resultBody = await api.get(`${import.meta.env.VITE_SERVER_URL}/`);
+    console.log(resultBody);
+
+    if (resultBody.status === 401) {
+      fetch("/signup");
+    }
+
+    return true;
+  }
+
+  useEffect(() => {
+    authenticate();
+  }, [])
+
   return (
     <div>
       <h1>Reptile Tracker</h1>
