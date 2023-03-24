@@ -1,5 +1,6 @@
 import express, { Request, RequestHandler } from "express";
 import { PrismaClient, Session, User } from "@prisma/client";
+import path from "path";
 const client = new PrismaClient();
 const app = express();
 import bcrypt from "bcrypt";
@@ -11,11 +12,38 @@ import { feedingsController } from "./controllers/feedings_controllers";
 import { husbandriesController } from "./controllers/husbandry_controllers";
 import { schedulesController } from "./controllers/schedule_controllers";
 import cors from 'cors';
+import { engine } from "express-handlebars";
+import manifest from "./static/manifest.json";
 
+app.engine("hbs", engine({ extname: ".hbs" }));
+app.set("view engine", "hbs");
+app.set("views", path.join(__dirname, "/views"));
 
+// app.use(cors({
+//   origin: "http://localhost:5173"
+// }));
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use((req, res, next) => {
+    if (req.path.match(/\.\w+$/)) {
+      fetch(`${process.env.ASSET_URL}/${req.path}`).then((response) => {
+        if (response.ok) {
+          res.redirect(response.url);
+        } else {
+          // handle dev problems here
+        }
+      });
+    } else {
+      next();
+    }
+  })
+} else {
+  app.use("/static", express.static(path.join(__dirname, "static")))
+  // do prod things
+}
 
 
 //
@@ -111,8 +139,26 @@ app.post("/sessions", async (req, res) => {
 
 
 app.get("/", (req, res) => {
+  console.log(req);
   // res.status(404).send(`<h1>Welcome to Reptile Tracker!</h1>`);
-  res.status(401).send({ message: "unauthorized" });
+  // res.setHeader("Access-Control-Allow-Credentials", true);
+  // res.status(401).send({ message: "unauthorized" });
+  // console.log(process.env.NODE_ENV);
+  // console.log(process.env.ASSET_URL);
+  // if (process.env.NODE_ENV === "production") {
+  //   res.render("app", {
+  //     development: false,
+  //     jsUrl: manifest["src/main.tsx"].file,
+  //     cssUrl: manifest["src/main.css"].file
+  //   })
+  // } else {
+  //   res.render("app", {
+  //     name: "Joseph",
+  //     development: true,
+  //     assetUrl: process.env.ASSET_URL,
+  //   });
+  // }
+  res.send(`<h1>hllo</h1>`)
 });
 
 app.post("/:anything", (req, res) => {
