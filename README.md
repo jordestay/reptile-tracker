@@ -43,39 +43,35 @@ A **User** has many **Reptiles, and Schedules.**
 
 A **Reptile** has many **Feedings, HusbandryRecords, and Schedules** 
 
-## Technical Requirements: Stories  
-- User
-	- create
-	- sign in
-- Reptile
-	- create 🔐
-	- delete 🔐
-	- update 🔐
-	- list all 🔐
-	- Feeding
-		- create 🔐
-		- list all 🔐
-	- Husbandry record
-		- create 🔐
-		- list all 🔐
-	- schedule pt.1
-		- create 🔐
-		- list all 🔐
-- Schedule pt.2
-	- list all schedules for a user 🔐
+### Install dependencies
+Install any necessary dependencies by running
 
-----
-## Running Local Server
-This project serves as a starting point for full-stack applications.
+With yarn
+```bash
+yarn
+```
+
+with npm
+```bash
+npm install
+```
 
 ### Database
 Create the database by running
+
+With yarn
 ```bash
 yarn db:migrate
 ```
+
+With npm
+```bash
+npm run migrate
+```
+
 You will need the re-run this command anytime you make changes to the schema file.
 
-### Running thhe server
+### Running the server
 Start the server by running:
 
 With yarn
@@ -100,17 +96,14 @@ With npm
 ```bash
 npm run build
 ```
-Footer
-© 2023 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
+
+## Devlog
+|Date |Time  |Ppl |Notes |
+--- | --- | --- | ---|
+|2/23/23 |1.5h |NT |fixed bugs in schedules controller and tested endpoints |
+|2/22/23 |1.5h |NT |minor tweaks and postman testing |
+|2/22/23 |3h |AA, CF, NT |controller setup and some testing |
+|2/21/23 |2h |NT |user authentication and reptile manipulation functionality | 
+|2/20/23 |1.5h |AA, CF, JT, NT |postman setup |  
+|2/17/23 |1h |AA, CF, NT |prisma setup |  
+|2/15/23 |1h |JT |initiated repo |  

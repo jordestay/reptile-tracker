@@ -3,8 +3,6 @@ import { RequestHandler } from "express";
 import { controller } from "../lib/controller";
 import { RequestWithSession } from "..";
 
-
-
 //
 // ------------------------------------------------------ Create a Schedule ---------------------------------------------------
 //
@@ -86,7 +84,6 @@ const CreateSchedule = (client: PrismaClient): RequestHandler =>
       return;
     }
 
-    
     // create requested schedule
     const schedule = await client.schedule.create({
       data: {
@@ -179,10 +176,6 @@ const ListUserSchedules = (client: PrismaClient): RequestHandler =>
 
 
 
-
-
-
-
 export const schedulesController = controller(
   "schedules",
   [
@@ -191,4 +184,3 @@ export const schedulesController = controller(
     { path: "/", method: "get", endpointBuilder: ListUserSchedules },
   ]
 );
-
