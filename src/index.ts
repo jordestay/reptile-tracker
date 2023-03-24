@@ -26,24 +26,6 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-if (process.env.NODE_ENV !== 'production') {
-  app.use((req, res, next) => {
-    if (req.path.match(/\.\w+$/)) {
-      fetch(`${process.env.ASSET_URL}/${req.path}`).then((response) => {
-        if (response.ok) {
-          res.redirect(response.url);
-        } else {
-          // handle dev problems here
-        }
-      });
-    } else {
-      next();
-    }
-  })
-} else {
-  app.use("/static", express.static(path.join(__dirname, "static")))
-  // do prod things
-}
 
 
 //
@@ -94,7 +76,7 @@ type LoginBody = {
 
 app.post("/sessions", async (req, res) => {
   const { email, password } = req.body as LoginBody;
-
+  
   const user = await client.user.findFirst({
     where: {
       email,
@@ -136,10 +118,28 @@ app.post("/sessions", async (req, res) => {
   res.json({ message: "Successfully logged in." });
 });
 
-
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV !== 'production') {
+  app.use((req, res, next) => {
+    if (req.path.match(/\.\w+$/)) {
+      fetch(`${process.env.ASSET_URL}/${req.path}`).then((response) => {
+        if (response.ok) {
+          res.redirect(response.url);
+        } else {
+          // handle dev problems here
+        }
+      });
+    } else {
+      next();
+    }
+  })
+} else {
+  app.use("/static", express.static(path.join(__dirname, "static")))
+  // do prod things
+}
 
 app.get("/", (req, res) => {
-  console.log(req);
+  // console.log(req);
   // res.status(404).send(`<h1>Welcome to Reptile Tracker!</h1>`);
   // res.setHeader("Access-Control-Allow-Credentials", true);
   // res.status(401).send({ message: "unauthorized" });
