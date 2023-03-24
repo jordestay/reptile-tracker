@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Home } from "../pages/Home";
-import { Login } from "../pages/Login";
-import { Signup } from "../pages/Signup";
-import { Dashboard } from "../pages/Dashboard";
-import { Reptile } from "../pages/Reptile";
+import { Home } from "./pages/Home";
+import { Login } from "./pages/Login";
+import { Signup } from "./pages/Signup";
+import { Dashboard } from "./pages/Dashboard";
+import { Reptile } from "./pages/Reptile";
 
-function Router() {
+function router() {
   const [page, setPage] = useState(window.location.hash.replace("#", ""));
 
   // this synchronizes the application state with the browser location state
@@ -47,7 +47,49 @@ function Router() {
   );
 }
 
-export default Router;
+
+
+
+
+// export default Router;
+
+// const router = createBrowserRouter([
+//   {
+//     path: '/',
+//     element: <Root />,
+//     children: [
+//       // {
+//       //   path: 'users/:id',
+//       //   element: <User />,
+//       // },
+//       {
+//         path: '/',
+//         element: <Home />
+//       }
+//     ]
+//   },
+// ])
+
+// export const App = () => {
+
+//   // const [api, setApi] = useState(new Api());
+
+//   // useEffect(() => {
+//   //   setApi(new Api());
+//   // }, []);
+
+
+//   return (
+//     <>
+//       {/* <ApiContext.Provider value={api}> */}
+//         <RouterProvider router={router} />
+//       {/* </ApiContext.Provider> */}
+//     </>
+//   )
+// }
+
+
+
 
 
 // import { useState } from "react";
