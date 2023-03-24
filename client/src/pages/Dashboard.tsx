@@ -6,7 +6,7 @@
 - I should be able to delete a reptile.
 - I should be able to log out of my account
 */
-import { Reptile } from "./pages/Reptile";
+import { Reptile } from "./Reptile";
 
 export const Dashboard = () => {
   return <h1>Dashboard</h1>;
