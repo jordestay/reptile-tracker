@@ -141,11 +141,11 @@ if (process.env.NODE_ENV !== 'production') {
   // do prod things
 }
 
-app.get("/", (req: RequestWithSession, res) => {
-  if (!req.user) {
-    console.log("als;dfj")
-    fetch('http://localhost:3000/login.tsx');
-  }
+app.get("/*", (req: RequestWithSession, res) => {
+  // if (!req.user) {
+  //   console.log("als;dfj")
+  //   fetch('http://localhost:3000/login.tsx');
+  // }
   // console.log(req);
   // res.status(404).send(`<h1>Welcome to Reptile Tracker!</h1>`);
   // res.setHeader("Access-Control-Allow-Credentials", true);
