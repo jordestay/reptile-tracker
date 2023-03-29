@@ -11,8 +11,11 @@ import { useEffect } from "react";
 import { Login } from "./Login";
 import { Signup } from "./Signup";
 import { useApi } from "../hooks/useApi";
+import { useNavigate, useParams } from "react-router-dom";
+
 
 export const Home = () => {
+  const navigate = useNavigate();
   const api = useApi();
 
   // const [pageName, setPage] = useState("toasts");
@@ -28,14 +31,18 @@ export const Home = () => {
     //   // body: JSON.stringify(body)
     // });
 
-    const resultBody = await api.get(`${import.meta.env.VITE_SERVER_URL}/`);
+    const resultBody = await api.get(`/users/user`);
     console.log(resultBody);
-
-    if (resultBody.status === 401) {
-      fetch("/signup");
+    console.log(resultBody.message)
+    if (resultBody.message !== "unauthorized") {
+      console.log("unauthorized");
+      navigate('dashboard', {replace: true}); // navigates to a new page
     }
+    // const resultBody = await api.get(`${import.meta.env.VITE_SERVER_URL}/`);
 
-    return true;
+    // console.log(resultBody);
+
+    // return true;
   }
 
   useEffect(() => {

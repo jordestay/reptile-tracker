@@ -3,10 +3,10 @@ import { json } from "react-router-dom";
 type Method = "get" | "post" | "put" | "del";
 
 export class Api {
-  private token = "";
-  constructor(token: string = "") {
-    this.token = token
-  }
+  // private token = "";
+  // constructor(token: string = "") {
+  //   this.token = token
+  // }
   private async makeRequest(url: string, method: Method, body: Record<string, any> = {}) {
     console.log(url);
     const options: RequestInit = {
