@@ -14,6 +14,8 @@ import { schedulesController } from "./controllers/schedule_controllers";
 import cors from 'cors';
 import { engine } from "express-handlebars";
 import manifest from "./static/manifest.json";
+// import dotenv from "dotenv";
+// dotenv.config();
 
 app.engine("hbs", engine({ extname: ".hbs" }));
 app.set("view engine", "hbs");
@@ -122,6 +124,7 @@ console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV !== 'production') {
   app.use((req, res, next) => {
     if (req.path.match(/\.\w+$/)) {
+      console.log("matches")
       fetch(`${process.env.ASSET_URL}/${req.path}`).then((response) => {
         if (response.ok) {
           res.redirect(response.url);
@@ -138,27 +141,32 @@ if (process.env.NODE_ENV !== 'production') {
   // do prod things
 }
 
-app.get("/", (req, res) => {
+app.get("/", (req: RequestWithSession, res) => {
+  if (!req.user) {
+    console.log("als;dfj")
+    fetch('http://localhost:3000/login.tsx');
+  }
   // console.log(req);
   // res.status(404).send(`<h1>Welcome to Reptile Tracker!</h1>`);
   // res.setHeader("Access-Control-Allow-Credentials", true);
   // res.status(401).send({ message: "unauthorized" });
   // console.log(process.env.NODE_ENV);
   // console.log(process.env.ASSET_URL);
-  // if (process.env.NODE_ENV === "production") {
-  //   res.render("app", {
-  //     development: false,
-  //     jsUrl: manifest["src/main.tsx"].file,
-  //     cssUrl: manifest["src/main.css"].file
-  //   })
-  // } else {
-  //   res.render("app", {
-  //     name: "Joseph",
-  //     development: true,
-  //     assetUrl: process.env.ASSET_URL,
-  //   });
-  // }
-  res.send(`<h1>hllo</h1>`)
+  console.log("went through")
+  if (process.env.NODE_ENV === "production") {
+    res.render("app", {
+      development: false,
+      jsUrl: manifest["src/main.tsx"].file,
+      cssUrl: manifest["src/main.css"].file
+    })
+  } else {
+    res.render("app", {
+      name: "Joseph",
+      development: true,
+      assetUrl: process.env.ASSET_URL,
+    });
+  }
+  // res.send(`<h1>hllo</h1>`)
 });
 
 app.post("/:anything", (req, res) => {
