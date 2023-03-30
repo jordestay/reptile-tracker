@@ -4,7 +4,7 @@ body {
     display: flex;
     min-height: 90vh;
   }
-  .login {
+  .signUp {
     color: white;
     background: #136a8a;
     background: 
@@ -21,20 +21,20 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);    
+    transform: translate(-50%, -50%);
   }
-  .login .head {
+  .signUp .head {
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .login .head .company {
+  .signUp .head .company {
     font-size: 2.2em;
   }
-  .login .msg {
+  .signUp .msg {
     text-align: center;
   }
-  .login .form input[type=text].text {
+  .signUp .form input[type=text].text {
     border: none;
     background: none;
     box-shadow: 0px 2px 0px 0px white;
@@ -43,10 +43,10 @@ body {
     font-size: 1em;
     outline: none;
   }
-  .login .form .text::placeholder {
+  .signUp .form .text::placeholder {
     color: #D3D3D3;
   }
-  .login .form input[type=password].password {
+  .signUp .form input[type=password].password {
     border: none;
     background: none;
     box-shadow: 0px 2px 0px 0px white;
@@ -57,10 +57,10 @@ body {
     margin-bottom: 20px;
     margin-top: 20px;
   }
-  .login .form .password::placeholder {
+  .signUp .form .password::placeholder {
     color: #D3D3D3;
   }
-  .login .form .btn-login {
+  .signUp .form .btn-signUp {
     background: none;
     text-decoration: none;
     color: white;
@@ -69,17 +69,17 @@ body {
     padding: 5px 2em;
     transition: 0.5s;
   }
-  .login .form .btn-login:hover {
+  .signUp .form .btn-signUp:hover {
     background: #8a6f13;
     color: white;
     transition: 0.5s;
   }
-  .login .forgot {
+  .signUp .signIn {
     text-decoration: none;
     color: white;
     float: right;
   }
-  .login .forgot:hover {
+  .signUp .signIn:hover {
     text-decoration: none;
     color: #8a6f13;
     float: right;
