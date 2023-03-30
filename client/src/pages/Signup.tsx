@@ -7,5 +7,5 @@ import { Login } from "./Login";
 import { Dashboard } from "./Dashboard";
 
 export const Signup = () => {
-  return <h1>Signup</h1>;
+  return <h1>Sign up</h1>;
 };
