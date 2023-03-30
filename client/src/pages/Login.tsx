@@ -15,7 +15,7 @@ export const Login = () => {
           <input className="text" type="text" placeholder="Email" id="email" required/>
           <input className="password" type="password" placeholder="Password" />
           <a href="#" className='btn-login' id='do-login'>Login</a>
-          <a href="#" className='forgot'>Sign Up</a>
+          <a href="Signup" className='forgot'>Sign Up</a>
         </form>
 
       </div>
