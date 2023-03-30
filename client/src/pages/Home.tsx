@@ -59,7 +59,7 @@ export const Home = () => {
         aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
         in voluptate velit eu fugiat nulla pariatur.
       </p>
-      <button onClick={() => navigate('login')}>Go to sign in</button>
+      <button onClick={() => navigate('login')}>Go to login</button>
       <button onClick={() => navigate('signup')}>Go to sign up</button>  
 
       {/* <div>
