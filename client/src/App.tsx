@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         element: <Dashboard />
       },
       {
-        path: 'reptile',
+        path: 'reptile/:id',
         element: <Reptile />
       }
     ]
