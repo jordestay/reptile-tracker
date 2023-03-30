@@ -28,6 +28,8 @@ const createUser = (client: PrismaClient): RequestHandler =>
   async (req, res) => {
     const { firstName, lastName, email, password } = req.body as CreateUserBody;
 
+    console.log(email);
+
     // check that required info is given
     if (!firstName || !lastName || !email || !password) {
       res.status(400).json({ message: "A user needs a firstName, lastName, email, and password." });
@@ -52,7 +54,10 @@ const createUser = (client: PrismaClient): RequestHandler =>
       }
     });
 
-    if (existingUser) res.status(400).json({ message: "User already exists." });
+    if (existingUser) {
+      res.status(400).json({ message: "User already exists." });
+      return;
+    } 
 
     // hash password
     const passwordHash = await bcrypt.hash(password, 10);

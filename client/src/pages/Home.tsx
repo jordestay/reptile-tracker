@@ -32,10 +32,10 @@ export const Home = () => {
     // });
 
     const resultBody = await api.get(`/users/user`);
-    console.log(resultBody);
-    console.log(resultBody.message)
+    // console.log(resultBody);
+    // console.log(resultBody.message)
     if (resultBody.message !== "unauthorized") {
-      console.log("unauthorized");
+      // console.log("unauthorized");
       navigate('dashboard', {replace: true}); // navigates to a new page
     }
     // const resultBody = await api.get(`${import.meta.env.VITE_SERVER_URL}/`);

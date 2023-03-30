@@ -8,7 +8,7 @@ export class Api {
   //   this.token = token
   // }
   private async makeRequest(url: string, method: Method, body: Record<string, any> = {}) {
-    console.log(url);
+    // console.log(url);
     const options: RequestInit = {
       method,
       headers: {
@@ -24,7 +24,7 @@ export class Api {
     }
 
     const result = await fetch(url, options);
-    console.log(result);
+    // console.log(result);
     return result.json();
   }
 
