@@ -4,6 +4,12 @@ This is a server that supports an app for managing reptiles via an API. Authenti
 ## Devlog
 |Date |Time  |Ppl |Notes |
 --- | --- | --- | ---|
+|3/29/23 |1.5h |AA, CF, JT, NT |coordinated page assignments and layouts|
+|3/29/23 |3h |NT |figured out server communication (finally!)|
+|3/28/23 |1h |NT |more server communication troubleshooting|
+|3/27/23 |2h |NT |continued to troubleshoot server communication|
+|3/24/23 |4h |NT |tried to work out how to get servers to communicate|
+|3/23/23 |1h |AA, CF, JT, NT |got skeleton of project built out|
 |3/11/23 |1h |JT |created base SPA layout |
 |2/23/23 |1.5h |NT |fixed bugs in schedules controller and tested endpoints |
 |2/22/23 |1.5h |JT |added scheduling controllers for Reptiles and Users |
