@@ -18,39 +18,28 @@ export const Reptile = () => {
   const [loggedIn, setLoggedIn] = useState(false);
 
   async function authenticate() {
-    // const result = await fetch(`localhost:3000/`, {
-    //   // method: 'post',
-    //   // headers: {
-    //   //   "Content-Type": "application/json"
-    //   // },
-    //   credentials: "include",
-    //   // body: JSON.stringify(body)
-    // });
-
     const resultBody = await api.get(`/users/user`);
-    console.log(resultBody);
-    console.log(resultBody.message)
     if (resultBody.message === "unauthorized") {
-      console.log("unauthorized");
-      navigate('../login', { replace: true }); // navigates to a new page
+      navigate('../login', { replace: true });
     }
-
     setLoggedIn(true);
-    // const resultBody = await api.get(`${import.meta.env.VITE_SERVER_URL}/`);
-
-    // console.log(resultBody);
-
-    // return true;
   }
 
   function getData() {
     // TODO: fetch data for dashboard from server
+    
   }
 
   useEffect(() => {
-    authenticate();
+    // authenticate();
     getData();
   }, [])
+
+  const reptilePage = (
+    <>
+
+    </>
+  );
 
   return (
     <>
