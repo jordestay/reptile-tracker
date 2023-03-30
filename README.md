@@ -4,7 +4,7 @@ This is a server that supports an app for managing reptiles via an API. Authenti
 ## Devlog
 |Date |Time  |Ppl |Notes |
 --- | --- | --- | ---|
-|3/29/23 |3h |NT |worked on getting reptile page functional|
+|3/29/23 |4h |NT |worked on getting reptile page functional and started on appearance|
 |3/29/23 |1.5h |AA, CF, JT, NT |coordinated page assignments and layouts|
 |3/29/23 |3h |NT |figured out server communication (finally!)|
 |3/28/23 |1h |NT |more server communication troubleshooting|

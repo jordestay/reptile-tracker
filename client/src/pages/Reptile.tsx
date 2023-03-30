@@ -7,6 +7,7 @@
 - I should be able to create a husbandry record for this reptile
 - I should be able to create a schedule for this reptile
 */
+import './Reptile.css';
 import { useApi } from "../hooks/useApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -195,14 +196,23 @@ export const Reptile = () => {
   //-------------------------------------------------------------------------------------------------------------
   const createFeedingForm = (
     <>
-      <form>
-        <input type="text" placeholder="Food" onChange={(e) => {
-          let newFeeding = { ...feeding };
-          newFeeding.foodItem = e.target.value;
-          setFeeding(newFeeding);
-        }} value={feeding.foodItem}></input>
-        <button type="button" onClick={() => createFeeding()}>Add Feeding</button>
-      </form>
+      <div className='signUp' id='signUp'>
+        <div className='company'>
+          <h2>Create Feeding</h2>
+        </div>
+        <p className='msg'>Please fill out the required information</p>
+        <div className='form'>
+          <form>
+            <input type="text" placeholder="Food" onChange={(e) => {
+              let newFeeding = { ...feeding };
+              newFeeding.foodItem = e.target.value;
+              setFeeding(newFeeding);
+            }} value={feeding.foodItem} className="text final"></input>
+            <a onClick={() => createFeeding()} className='btn-signUp' id='do-signUp'>Add Feeding</a>
+            {/* <button type="button" onClick={() => createFeeding()}>Add Feeding</button> */}
+          </form>
+        </div>
+      </div>
     </>
   )
 
@@ -308,49 +318,61 @@ export const Reptile = () => {
   //-------------------------------------------------------------------------------------------------------------
   const reptilePage = (
     <>
-      <h1>{reptile.name}</h1>
-      <div>
-        {
-          feedings.map((feeding) => (
-            <div key={feeding.id}>
-              <p>{feeding.foodItem}</p>
-            </div>
-          ))
-        }
-        <button onClick={() => setCreatingFeeding(!creatingFeeding)}>Create Feeding</button>
-        {creatingFeeding && createFeedingForm}
+      <div className="header container">
+        <h1>{reptile.name}</h1>
+        <h2>{reptile.species ? reptile.species.replace("_", " ") : ""}</h2>
+        <h2>{reptile.sex}</h2>
       </div>
-      <div>
-        {
-          husbandries.map((husbandry) => (
-            <div key={husbandry.id}>
-              <p>length {husbandry.length} humidity {husbandry.humidity} temp {husbandry.temperature} weight {husbandry.weight}</p>
-            </div>
-          ))
-        }
-        <button onClick={() => setCreatingHusbandry(!creatingHusbandry)}>Create Husbandry</button>
-        {creatingHusbandry && createHusbandryForm}
-      </div>
-      <div>
-        {
-          schedules.map((schedule) => (
-            <div key={schedule.id}>
-              <p>
-                {schedule.type}&nbsp;
-                {schedule.description}&nbsp;
-                {schedule.monday ? "Monday" : ""}&nbsp;
-                {schedule.tuesday ? "Tuesday" : ""}&nbsp;
-                {schedule.wednesday ? "Wednesday" : ""}&nbsp;
-                {schedule.thursday ? "Thursday" : ""}&nbsp;
-                {schedule.friday ? "Friday" : ""}&nbsp;
-                {schedule.saturday ? "Saturday" : ""}&nbsp;
-                {schedule.sunday ? "Sunday" : ""}&nbsp;
-              </p>
-            </div>
-          ))
-        }
-        <button onClick={() => setCreatingSchedule(!creatingSchedule)}>Create Schedule</button>
-        {creatingSchedule && createScheduleForm}
+      <div className='row'>
+        <div className='col'>
+          <div className='container'>
+            {
+              schedules.map((schedule) => (
+                <div key={schedule.id}>
+                  <p>
+                    {schedule.type}&nbsp;
+                    {schedule.description}&nbsp;
+                    {schedule.monday ? "Monday" : ""}&nbsp;
+                    {schedule.tuesday ? "Tuesday" : ""}&nbsp;
+                    {schedule.wednesday ? "Wednesday" : ""}&nbsp;
+                    {schedule.thursday ? "Thursday" : ""}&nbsp;
+                    {schedule.friday ? "Friday" : ""}&nbsp;
+                    {schedule.saturday ? "Saturday" : ""}&nbsp;
+                    {schedule.sunday ? "Sunday" : ""}&nbsp;
+                  </p>
+                </div>
+              ))
+            }
+            <button onClick={() => setCreatingSchedule(!creatingSchedule)}>Create Schedule</button>
+            {creatingSchedule && createScheduleForm}
+          </div>
+        </div>
+        <div className='col'>
+
+          <div className='container'>
+            {
+              feedings.map((feeding) => (
+                <div key={feeding.id}>
+                  <p>{feeding.foodItem}</p>
+                </div>
+              ))
+            }
+            <button onClick={() => setCreatingFeeding(!creatingFeeding)}>Create Feeding</button>
+            {creatingFeeding && createFeedingForm}
+          </div>
+          <div className='container'>
+            {
+              husbandries.map((husbandry) => (
+                <div key={husbandry.id}>
+                  <p>length {husbandry.length} humidity {husbandry.humidity} temp {husbandry.temperature} weight {husbandry.weight}</p>
+                </div>
+              ))
+            }
+            <button onClick={() => setCreatingHusbandry(!creatingHusbandry)}>Create Husbandry</button>
+            {creatingHusbandry && createHusbandryForm}
+          </div>
+        </div>
+
       </div>
     </>
   );
