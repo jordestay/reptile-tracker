@@ -10,8 +10,10 @@ import { Dashboard } from "./Dashboard";
 import { useContext, useState } from 'react';
 import { useApi } from '../hooks/useApi';
 import { AuthContext } from '../contexts/auth';
+import { useNavigate } from 'react-router-dom';
 
 export const Signup = () => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,9 +29,15 @@ export const Signup = () => {
       password
     }
 
-    //const result = await api.post(`/users`, body);
-    const result = await api.post(`/sessions`, body);
+    const result = await api.post(`/users`, body);
+    // const result = await api.post(`/sessions`, body);
 
+    if (result.message !== "User created.") {
+      return;
+    }
+
+    navigate('../dashboard', {replace: true}); // navigates to a new page
+    
     console.log("hit signup page")
     console.log(result);
   }
@@ -45,7 +53,7 @@ export const Signup = () => {
         <input value={lastName} onChange={e => setLastName(e.target.value)} type="text" placeholder='Last Name' className='text' id='lastName' required /><br /><br />
         <input value={email} onChange={e => setEmail(e.target.value)} type="text" placeholder='Email' className='text' id='email' required /><br />
         <input value={password} onChange={e => setPassword(e.target.value)} type="password" placeholder='Password' className='password' /><br /><br />
-        <a href="Dashboard" onClick={signUp} className='btn-signUp' id='do-signUp'>Create Account</a>
+        <a onClick={() => signUp()} className='btn-signUp' id='do-signUp'>Create Account</a>
         <a href="login" className='signIn'>Login</a>
       </form>
     </div>
