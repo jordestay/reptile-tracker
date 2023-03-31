@@ -19,7 +19,8 @@ export const Login = () => {
       password
     }
 
-    const resultBody = await api.post(`${import.meta.env.DATABASE_URL}/users`, body)
+    const resultBody = await api.post(`/sessions`, body);
+    console.log(resultBody);
 
     if (resultBody.token) {
       
@@ -35,7 +36,7 @@ export const Login = () => {
         <form >
           <input className="text" type="text" placeholder="Email" id="email" required/>
           <input className="password" type="password" placeholder="Password" />
-          <a href="#" className='btn-login' id='do-login'>Login</a>
+          <a href="#" className='btn-login' id='do-login' onClick={() => login()}>Login</a>
           <a href="Signup" className='forgot'>Sign Up</a>
         </form>
 
