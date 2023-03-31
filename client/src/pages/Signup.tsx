@@ -27,16 +27,13 @@ export const Signup = () => {
       password
     }
 
-    const response = await api.post(`${import.meta.env.DATABASE_URL}/auth/signup`, body)
+    //const result = await api.post(`/users`, body);
+    const result = await api.post(`/sessions`, body);
 
-    if (response.status === 200) {
-      const user = await api.get(`${import.meta.env.DATABASE_URL}/auth/user`);
-      setAuth(user.data);
-    } else {
-      // handle error
-    }
+    console.log("hit signup page")
+    console.log(result);
   }
-  
+
   return <div className='signUp' id='signUp'>
     <div className='company'>
       <h1>Reptile Tracker</h1>
