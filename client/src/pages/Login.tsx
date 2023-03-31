@@ -6,10 +6,12 @@
 import { useContext, useState } from 'react';
 import { useApi } from '../hooks/useApi';
 import './Login.css'
+import { useNavigate } from 'react-router-dom';
+
 export const Login = () => {
-  
-  const [email, getEmail] = useState("");
-  const [password, getPassword] = useState("");
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const api = useApi();
   
 
@@ -20,11 +22,16 @@ export const Login = () => {
     }
 
     const resultBody = await api.post(`/sessions`, body);
-    console.log(resultBody);
+    
 
-    if (resultBody.token) {
-      
+    if (resultBody.message !== "Successfully logged in.") {
+      return;
     }
+    navigate('../dashboard', {replace: true}); // navigates to a new page
+
+    console.log("hit the login page");
+    
+  
   }
 
   
@@ -34,8 +41,8 @@ export const Login = () => {
       </div>
       <div className="form">
         <form >
-          <input className="text" type="text" placeholder="Email" id="email" required/>
-          <input className="password" type="password" placeholder="Password" />
+          <input onChange={e => setEmail(e.target.value)} className="text" type="text" placeholder="Email" id="email" required/>
+          <input onChange={e => setPassword(e.target.value)} className="password" type="password" placeholder="Password" />
           <a href="#" className='btn-login' id='do-login' onClick={() => login()}>Login</a>
           <a href="Signup" className='forgot'>Sign Up</a>
         </form>
