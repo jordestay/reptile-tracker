@@ -15,7 +15,7 @@ export const Root = () => {
 
   return (
     <>
-      <nav className="navbar" onClick={() => navigate('/dashboard')}>{name}</nav>
+      {/* <nav className="navbar" onClick={() => navigate('/dashboard')}>{name}</nav> */}
       <Outlet />
     </>
   )

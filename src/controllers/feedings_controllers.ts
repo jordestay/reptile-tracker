@@ -55,7 +55,10 @@ const CreateFeeding = (client: PrismaClient): RequestHandler =>
     });
 
     // return the newly created reptile
-    res.json({ message: "Feeding created." });
+    res.json({
+      message: "Feeding created.",
+      feeding
+    });
   }
 
 

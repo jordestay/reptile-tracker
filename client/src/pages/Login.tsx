@@ -44,7 +44,7 @@ export const Login = () => {
           <input onChange={e => setEmail(e.target.value)} className="text" type="text" placeholder="Email" id="email" required/>
           <input onChange={e => setPassword(e.target.value)} className="password" type="password" placeholder="Password" />
           <a href="#" className='btn-login' id='do-login' onClick={() => login()}>Login</a>
-          <a href="Signup" className='forgot'>Sign Up</a>
+          <a href="signup" className='forgot'>Sign Up</a>
         </form>
 
       </div>
