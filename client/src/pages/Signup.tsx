@@ -4,7 +4,7 @@
 - Upon creating an account I should be redirected to the dashboard page
 */
 
-import './SignUp.css'
+import './SignUp.css';
 import { Login } from "./Login";
 import { Dashboard } from "./Dashboard";
 import { useContext, useState } from 'react';
