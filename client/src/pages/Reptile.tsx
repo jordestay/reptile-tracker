@@ -1,17 +1,7 @@
-/* TODO:
-- I should see a list of all of the feedings for this reptile
-- I should see a list of all of the husbandry records for this reptile
-- I should see a list of all of the schedules for this reptile.
-- I should be able to update this reptile
-- I should be able to create a feeding for this reptile
-- I should be able to create a husbandry record for this reptile
-- I should be able to create a schedule for this reptile
-*/
 import './Reptile.css';
 import { useApi } from "../hooks/useApi";
-import { useNavigate, useParams, useResolvedPath } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 
 type Reptile = {
   name: string,
@@ -50,22 +40,26 @@ type Schedule = {
 export const Reptile = () => {
   const navigate = useNavigate();
   const api = useApi();
+
   const { id } = useParams();
   const [loggedIn, setLoggedIn] = useState(false);
   const [reptile, setReptile] = useState<Reptile>({} as Reptile);
-  const [newReptile, setNewReptile] = useState<Reptile>({
-    name: "",
-    sex: "",
-    species: ""
-  } as Reptile);
+
   const [feedings, setFeedings] = useState<Feeding[]>([]);
   const [husbandries, setHusbandries] = useState<Husbandry[]>([]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
+
   const [creatingFeeding, setCreatingFeeding] = useState(false);
   const [creatingHusbandry, setCreatingHusbandry] = useState(false);
   const [creatingSchedule, setCreatingSchedule] = useState(false);
   const [editingReptile, setEditingReptile] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const [newReptile, setNewReptile] = useState<Reptile>({
+    name: "",
+    sex: "",
+    species: ""
+  } as Reptile);
   const [feeding, setFeeding] = useState<Feeding>({ foodItem: "" } as Feeding);
   const [husbandry, setHusbandry] = useState<Husbandry>({
     length: 0,
@@ -85,6 +79,21 @@ export const Reptile = () => {
     sunday: false,
   } as Schedule);
 
+  //-------------------------------------------------------------------------------------------------------------
+  //
+  //                                     S T A R T     U P
+  //
+  //-------------------------------------------------------------------------------------------------------------
+  useEffect(() => {
+    authenticate();
+    getData();
+  }, [])
+
+  //-------------------------------------------------------------------------------------------------------------
+  //
+  //                                     O N - C H A N G E S
+  //
+  //-------------------------------------------------------------------------------------------------------------
   useEffect(() => {
     if (creatingFeeding) {
       setCreatingHusbandry(false);
@@ -149,31 +158,11 @@ export const Reptile = () => {
     }
   }, [editingReptile]);
 
-
-
-  async function signUp() {
-    const body = {
-      firstName: "Nate",
-      lastName: "Taylor",
-      email: "nate.taylor@usu.edu",
-      password: "password"
-    }
-    // const result = await api.post(`/users`, body);
-    const result = await api.post(`/sessions`, body);
-
-    console.log(result);
-  }
-
-  async function createReptile() {
-    const body = {
-      name: "ash",
-      species: "redtail_boa",
-      sex: "f"
-    }
-    const result = await api.post(`/reptiles`, body);
-    console.log(result);
-  }
-
+  //-------------------------------------------------------------------------------------------------------------
+  //
+  //                                     A U T H E N T I C A T E
+  //
+  //-------------------------------------------------------------------------------------------------------------
   async function authenticate() {
     const resultBody = await api.get(`/users/user`);
     if (resultBody.message === "unauthorized") {
@@ -202,16 +191,12 @@ export const Reptile = () => {
   //
   //-------------------------------------------------------------------------------------------------------------
   async function getData() {
+    // pull reptiles and specify the current reptile
     const resultBody = await api.get(`/reptiles`);
-    console.log(resultBody);
-    if (!id || isNaN(parseInt(id))) {
-      navigate('../dashboard, {replace: true}');
+    if (!id || isNaN(parseInt(id)) || id > resultBody.reptiles.length) {
+      navigate('../dashboard', { replace: true });
     } else {
-      try {
-        setReptile(resultBody.reptiles[parseInt(id)-1]);
-      } catch (e) { // if there is no id-th reptile for the user
-        navigate('../dashboard, {replace: true}');
-      }
+      setReptile(resultBody.reptiles[parseInt(id) - 1]);
     }
 
     // retrieve feedings from database
@@ -234,7 +219,6 @@ export const Reptile = () => {
     setHusbandries(sortedHusbandries);
 
     const scheduleResultBody = await api.get(`/schedules/${id}`);
-    console.log(scheduleResultBody);
     setSchedules(scheduleResultBody.schedules);
   }
 
@@ -246,7 +230,6 @@ export const Reptile = () => {
   async function editReptile() {
     setErrorMessage('');
     const editReptileBody = await api.put(`/reptiles/${id}`, newReptile);
-    console.log(editReptileBody);
     if (editReptileBody.message === "Reptile updated.") {
       const updatedReptile = editReptileBody.reptile;
       setReptile(updatedReptile);
@@ -264,7 +247,6 @@ export const Reptile = () => {
   async function createFeeding() {
     setErrorMessage('');
     const createFeedingBody = await api.post(`/feedings/${id}`, feeding);
-    console.log(createFeedingBody);
     // feeding creation is successful
     if (createFeedingBody.message === "Feeding created.") {
       // add feeding to feedings
@@ -285,7 +267,6 @@ export const Reptile = () => {
   async function createHusbandry() {
     setErrorMessage('');
     const createHusbandryBody = await api.post(`/husbandries/${id}`, husbandry);
-    console.log(createHusbandryBody);
     if (createHusbandryBody.message === "Husbandry created.") {
       const newHusbandry = createHusbandryBody.husbandry;
       setHusbandries([newHusbandry, ...husbandries]);
@@ -303,7 +284,6 @@ export const Reptile = () => {
   async function createSchedule() {
     setErrorMessage('');
     const createScheduleBody = await api.post(`/schedules/${id}`, schedule);
-    console.log(createScheduleBody);
     if (createScheduleBody.message === "Schedule created.") {
       const newSchedule = createScheduleBody.schedule;
       setSchedules([newSchedule, ...schedules]);
@@ -312,18 +292,6 @@ export const Reptile = () => {
       setErrorMessage(createScheduleBody.message);
     }
   }
-
-  //-------------------------------------------------------------------------------------------------------------
-  //
-  //                                     S T A R T     U P
-  //
-  //-------------------------------------------------------------------------------------------------------------
-  useEffect(() => {
-    authenticate();
-    getData();
-    // createReptile();
-    signUp();
-  }, [])
 
   //-------------------------------------------------------------------------------------------------------------
   //
@@ -356,7 +324,6 @@ export const Reptile = () => {
             }} value={newReptile.species} className="text final"></input>
             <a onClick={() => editReptile()} className='btn-signUp' id='do-signUp'>Submit Changes</a>
             <a className='forgot' onClick={() => setEditingReptile(false)}>Cancel</a>
-            {/* <button type="button" onClick={() => createFeeding()}>Add Feeding</button> */}
             <p>{errorMessage !== '' && errorMessage}</p>
           </form>
         </div>
@@ -385,7 +352,6 @@ export const Reptile = () => {
             }} value={feeding.foodItem} className="text final"></input>
             <a onClick={() => createFeeding()} className='btn-signUp' id='do-signUp'>Add Feeding</a>
             <a className='forgot' onClick={() => setCreatingFeeding(false)}>Cancel</a>
-            {/* <button type="button" onClick={() => createFeeding()}>Add Feeding</button> */}
             <p>{errorMessage !== '' && errorMessage}</p>
           </form>
         </div>
@@ -457,7 +423,6 @@ export const Reptile = () => {
             ></input>
             <a onClick={() => createHusbandry()} className='btn-signUp' id='do-signUp'>Add Husbandry</a>
             <a className='forgot' onClick={() => setCreatingHusbandry(false)}>Cancel</a>
-            {/* <button type="button" onClick={() => createHusbandry()}>Add Husbandry</button> */}
             <p>{errorMessage !== '' && errorMessage}</p>
           </form>
         </div>
@@ -539,7 +504,6 @@ export const Reptile = () => {
             </div>
             <a onClick={() => createSchedule()} className='btn-signUp' id='do-signUp'>Add Schedule</a>
             <a className='forgot' onClick={() => setCreatingSchedule(false)}>Cancel</a>
-            {/* <button type="button" onClick={() => createSchedule()}>Add Schedule</button> */}
             <p>{errorMessage !== '' && errorMessage}</p>
           </form>
         </div>
@@ -563,7 +527,6 @@ export const Reptile = () => {
             </div>
             <div>
               <button id='edit' onClick={() => { setEditingReptile(!editingReptile) }}>Edit</button>
-              {editingReptile && updateReptileForm}
             </div>
           </div>
           <button onClick={() => { navigate('../dashboard') }}>Back to Dashboard</button>
@@ -582,49 +545,23 @@ export const Reptile = () => {
                       <div className='row section-heading'>
                         <div className='col'>
                           <h3>{schedule.type.toUpperCase()}&nbsp;</h3>
-                          {/* <h4>Description</h4> */}
                           <p className='description'>{schedule.description}</p>
                           <br></br>
                         </div>
-                        {/* <p>
-                          {schedule.type}&nbsp;
-                          {schedule.description}&nbsp;
-                        </p> */}
                         <div className='row days'>
-
                           <p className='day'>{schedule.monday ? "M" : ""}</p>
                           <p className='day'>{schedule.tuesday ? "T" : ""}</p>
-
                           <p className='day'>{schedule.wednesday ? "W" : ""}</p>
-
                           <p className='day'>{schedule.thursday ? "T" : ""}</p>
-
                           <p className='day'>{schedule.friday ? "F" : ""}</p>
-
                           <p className='day'>{schedule.saturday ? "S" : ""}</p>
-
                           <p className='day'>{schedule.sunday ? "S" : ""}</p>
-
                         </div>
-                        {/* <p>
-
-                          |&nbsp;&nbsp;{schedule.monday ? "M" : "-"}&nbsp;&nbsp;|
-                          &nbsp;&nbsp;{schedule.tuesday ? "T" : "-"}&nbsp;&nbsp;|
-                          &nbsp;&nbsp;{schedule.wednesday ? "W" : "-"}&nbsp;&nbsp;|
-                          &nbsp;&nbsp;{schedule.thursday ? "T" : "-"}&nbsp;&nbsp;|
-                          &nbsp;&nbsp;{schedule.friday ? "F" : "-"}&nbsp;&nbsp;|
-                          &nbsp;&nbsp;{schedule.saturday ? "S" : "-"}&nbsp;&nbsp;|
-                          &nbsp;&nbsp;{schedule.sunday ? "S" : "-"}&nbsp;&nbsp;|
-                        </p> */}
                       </div>
-                      {/* <div>
-                        <p>{schedule.description}</p>
-                      </div> */}
                     </div>
                   ))
                 }
               </div>
-              {creatingSchedule && createScheduleForm}
             </div>
           </div>
           <div className='col right'>
@@ -645,7 +582,6 @@ export const Reptile = () => {
                   ))
                 }
               </div>
-              {creatingFeeding && createFeedingForm}
             </div>
             <div className='container right'>
               <div className='row section-heading'>
@@ -656,7 +592,6 @@ export const Reptile = () => {
                 {
                   husbandries.map((husbandry) => (
                     <div key={husbandry.id} className="item row stats">
-                      {/* <div className='section-heading'> */}
                       <div>
                         <h3>Length</h3>
                         <p>{husbandry.length}</p>
@@ -674,20 +609,20 @@ export const Reptile = () => {
                         <p>{husbandry.humidity}</p>
                       </div>
                       <p>{formatDate(new Date(husbandry.updatedAt))}</p>
-                      {/* </div> */}
                     </div>
                   ))
                 }
               </div>
-              {creatingHusbandry && createHusbandryForm}
             </div>
           </div>
-
         </div>
       </div>
+      {creatingFeeding && createFeedingForm}
+      {creatingSchedule && createScheduleForm}
+      {creatingHusbandry && createHusbandryForm}
+      {editingReptile && updateReptileForm}
     </>
   );
-
 
   return (
     <>

@@ -14,16 +14,11 @@ import { schedulesController } from "./controllers/schedule_controllers";
 import cors from 'cors';
 import { engine } from "express-handlebars";
 import manifest from "./static/manifest.json";
-// import dotenv from "dotenv";
-// dotenv.config();
 
 app.engine("hbs", engine({ extname: ".hbs" }));
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "/views"));
 
-// app.use(cors({
-//   origin: "http://localhost:5173"
-// }));
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
@@ -82,11 +77,7 @@ app.post("/sessions", async (req, res) => {
   const user = await client.user.findFirst({
     where: {
       email,
-    },
-    // include: {
-    //   sessions: true,
-    //   reptiles: true
-    // }
+    }
   });
 
   // check that user with given email exists
@@ -120,11 +111,9 @@ app.post("/sessions", async (req, res) => {
   res.json({ message: "Successfully logged in." });
 });
 
-console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV !== 'production') {
   app.use((req, res, next) => {
     if (req.path.match(/\.\w+$/)) {
-      console.log("matches")
       fetch(`${process.env.ASSET_URL}/${req.path}`).then((response) => {
         if (response.ok) {
           res.redirect(response.url);
@@ -142,17 +131,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.get("/*", (req: RequestWithSession, res) => {
-  // if (!req.user) {
-  //   console.log("als;dfj")
-  //   fetch('http://localhost:3000/login.tsx');
-  // }
-  // console.log(req);
-  // res.status(404).send(`<h1>Welcome to Reptile Tracker!</h1>`);
-  // res.setHeader("Access-Control-Allow-Credentials", true);
-  // res.status(401).send({ message: "unauthorized" });
-  // console.log(process.env.NODE_ENV);
-  // console.log(process.env.ASSET_URL);
-  console.log("went through")
   if (process.env.NODE_ENV === "production") {
     res.render("app", {
       development: false,
@@ -166,7 +144,6 @@ app.get("/*", (req: RequestWithSession, res) => {
       assetUrl: process.env.ASSET_URL,
     });
   }
-  // res.send(`<h1>hllo</h1>`)
 });
 
 app.post("/:anything", (req, res) => {
