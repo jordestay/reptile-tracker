@@ -65,7 +65,10 @@ const CreateHusbandry = (client: PrismaClient): RequestHandler =>
       }
     });
 
-    res.json({ message: "Husbandry created." });
+    res.json({ 
+      message: "Husbandry created.",
+      husbandry
+    });
   }
 
 

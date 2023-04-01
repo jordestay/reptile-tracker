@@ -102,7 +102,10 @@ const CreateSchedule = (client: PrismaClient): RequestHandler =>
     });
 
     // return the newly created schedule
-    res.json({ message: "Schedule created." });
+    res.json({ 
+      message: "Schedule created.",
+      schedule
+    });
   }
 
 //

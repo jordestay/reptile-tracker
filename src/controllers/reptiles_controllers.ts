@@ -88,6 +88,30 @@ const UpdateReptile = (client: PrismaClient): RequestHandler =>
       return;
     }
 
+    // make sure user puts in the needed info
+    if (!species || !name || !sex) {
+      res.status(400).json({ message: "A reptile needs a specific species, name, and sex." });
+      return;
+    }
+
+    // check species type
+    if (!(["ball_python", "king_snake", "corn_snake", "redtail_boa"].includes(species))) {
+      res.status(400).json({ message: "A reptile's species must one of the following: ball_python, king_snake, corn_snake, or redtail_boa." });
+      return;
+    }
+
+    // check sex type
+    if (!(["m", "f"].includes(sex))) {
+      res.status(400).json({ message: "A reptile's sex must one of the following: m or f." });
+      return;
+    }
+
+    // validate input
+    if (typeof species !== "string" || typeof name !== "string" || typeof sex !== "string") {
+      res.status(400).json({ message: "The reptile's species, name, and sex must be strings." });
+      return;
+    }
+
     // update the reptile in question
     const reptile = await client.reptile.update({
       where: {
@@ -101,7 +125,10 @@ const UpdateReptile = (client: PrismaClient): RequestHandler =>
     });
 
     // return the new reptile
-    res.json({ message: "Reptile updated." });
+    res.json({ 
+      message: "Reptile updated.",
+      reptile
+    });
   }
 
 const DeleteReptile = (client: PrismaClient): RequestHandler =>
