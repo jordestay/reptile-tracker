@@ -53,19 +53,16 @@ export const Dashboard = () => {
   }, [])
 
   return <div>
+            <div className="btn-info">ReptíDex<br />{getDay()} Dashboard</div>
     <div className="card">
-      <div className="pill">Type</div>
-      <div className="title">Pikachu</div>
-      <button className="delete">Delete</button>
+      <div className="title"><a href="reptile">name</a></div>
+      <button className="delete">X</button>
       <div className="image-container">
+        <img src="https://via.placeholder.com/150x110" alt="Pikachu" />
       </div>
       <div className="info">
-        <div className="label">Height</div>
-        <div className="value">40 cm</div>
-        <div className="label">Weight</div>
-        <div className="value">6.0 kg</div>
-        <div className="label">Abilities</div>
-        <div className="value">Static, Lightning Rod</div>
+        <div className="label">{getDay()} Schedule</div>
+        <div className="value">10am - Feed</div>
       </div>
     </div>
   </div>
@@ -118,4 +115,11 @@ const generateTranslate = (el, e, value) => {
         el.style.transform = `translate(${e.clientX * value}px, ${e.clientY * value}px)`;
 };
 
+const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+const getDay = () => {
+  const d = new Date();
+  let day = weekday[d.getDay()];
+  return day;
+}
      
