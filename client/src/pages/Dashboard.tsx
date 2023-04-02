@@ -1,11 +1,31 @@
+//-------------------------------------------------------------------------------------------------------------
+//
+//                                     D E S C R I P T I O N
+//
+//-------------------------------------------------------------------------------------------------------------
 /* TODO:
-- I should see all of the schedules for my user for the day of the week it is (for example, if it is Monday then I should only see the schedules that have me doing something on Monday.)
+- I should see all of the schedules for my user for the day of the week it is
 - I should see a list of all my reptiles
 - When selecting a reptile the app should navigate to the Reptile page
 - I should be able to create a new reptile (you can do this on this page via something like a pop up, or you can create a new page for this)
 - I should be able to delete a reptile.
 - I should be able to log out of my account
 */
+//-------------------------------------------------------------------------------------------------------------
+//
+//                                     P S E U D O C O D E
+//
+//-------------------------------------------------------------------------------------------------------------
+/*
+for reptile in reptiles
+  create card
+    link to reptile page
+    add delete button
+  for schedule in schedules
+    if schedule.day == true
+      add schedule to card
+*/
+
 import { useEffect, useState } from "react";
 import { Reptile } from "./Reptile";
 import { useApi } from "../hooks/useApi";
@@ -62,6 +82,7 @@ export const Dashboard = () => {
     authenticate();
     getData();
   }, [])
+
   //-------------------------------------------------------------------------------------------------------------
   //
   //                                     G E T     D A Y
@@ -94,47 +115,62 @@ export const Dashboard = () => {
 
   //-------------------------------------------------------------------------------------------------------------
   //
+  //                                     C R E A T E     C A R D
+  //
+  //-------------------------------------------------------------------------------------------------------------
+  let createCard = (
+    <>
+      <div className="card">
+        <div className="title"><a href={reptile.id}>{reptile.name}</a></div>
+        <button className="delete">X</button>
+        <div className="image-container">
+          <img src="https://via.placeholder.com/150x110" />
+        </div>
+        <div className="info">
+          <div className="label">{getDay()} Schedule</div>
+          <div className='items'>
+            {
+              schedules.map((schedule) => (
+                <div key={schedule.id} className="item">
+                  <div className='row section-heading'>
+                    <div className='col'>
+                      <h3>{schedule.type.toUpperCase()}&nbsp;</h3>
+                      <p className='description'>{schedule.description}</p>
+                      <br></br>
+                    </div>
+                    <div className='row days'>
+                      <p className='day'>{schedule.monday ? "M" : ""}</p>
+                      <p className='day'>{schedule.tuesday ? "T" : ""}</p>
+                      <p className='day'>{schedule.wednesday ? "W" : ""}</p>
+                      <p className='day'>{schedule.thursday ? "T" : ""}</p>
+                      <p className='day'>{schedule.friday ? "F" : ""}</p>
+                      <p className='day'>{schedule.saturday ? "S" : ""}</p>
+                      <p className='day'>{schedule.sunday ? "S" : ""}</p>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </>
+  );
+
+  //-------------------------------------------------------------------------------------------------------------
+  //
   //                                     V I E W     S C H E D U L E S
   //
   //-------------------------------------------------------------------------------------------------------------
   const dashboardPage = (
     <>
       <div>
-        <div className="btn-info">ReptíDex<br />{getDay()} Dashboard</div>
-        <div className="card">
-          <div className="title"><a href="reptile">{reptile.name}</a></div>
-          <button className="delete">X</button>
-          <div className="image-container">
-            <img src="https://via.placeholder.com/150x110" alt="Pikachu" />
-          </div>
-          <div className="info">
-            <div className="label">{getDay()} Schedule</div>
-            <div className='items'>
-              {
-                schedules.map((schedule) => (
-                  <div key={schedule.id} className="item">
-                    <div className='row section-heading'>
-                      <div className='col'>
-                        <h3>{schedule.type.toUpperCase()}&nbsp;</h3>
-                        <p className='description'>{schedule.description}</p>
-                        <br></br>
-                      </div>
-                      <div className='row days'>
-                        <p className='day'>{schedule.monday ? "M" : ""}</p>
-                        <p className='day'>{schedule.tuesday ? "T" : ""}</p>
-                        <p className='day'>{schedule.wednesday ? "W" : ""}</p>
-                        <p className='day'>{schedule.thursday ? "T" : ""}</p>
-                        <p className='day'>{schedule.friday ? "F" : ""}</p>
-                        <p className='day'>{schedule.saturday ? "S" : ""}</p>
-                        <p className='day'>{schedule.sunday ? "S" : ""}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              }
-            </div>
-          </div>
+        <div className="topnav">
+          <a href="#">Logout</a>
+          <a href="#">Create Reptile</a>
         </div>
+        <div className="btn-info">ReptíDex<br />{getDay()}'s Dashboard</div>
+
       </div>
     </>
   );

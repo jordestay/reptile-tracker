@@ -1,86 +1,101 @@
+.topnav {
+  overflow: hidden;
+}
 
+.topnav a {
+  float: right;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  background-color: black;
+  color: white;
+}
 
-
+.topnav a:hover {
+  background-color: #04AA6D;
+  color: white;
+}
 
 .card {
-    background-color: #EFEFEF;
-    border: 15px solid #FFCB05;
-    border-radius: 10px;
-    padding: 20px;
-    position: relative;
-    width: 400px;
-    height: 550px;
-    margin: 20px;
-    display: inline-block;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    text-shadow: 1px 1px #000;
-    box-shadow: 2px 2px #000;
-  }
-  
-  .title {
-    border-radius: 20px;
-    padding: 10px 20px;
-    position: absolute;
-    top: 0px;
-    left: 20px;
-    font-size: 48px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-  }
-  
-  .delete {
-    background-color: #FF5555;
-    color: #FFF;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-    font-size: 16px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .delete:hover {
-    background-color: #FF7777;
-  }
-  
-  .image-container {
-    text-align: center;
-    margin-top: 60px;
-  }
-  
-  .image-container img {
-    width: 300px;
-    height: auto;
-  }
-  
-  .info {
-    margin-top: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    color:#000;
-  }
-  
-  .label {
-    font-size: 24px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-top: 20px;
-    color:#000;
-  }
-  
-  .value {
-    font-size: 32px;
-    font-weight: bold;
-    margin-top: 10px;
-    color:#000;
-  }
+  background-color: #EFEFEF;
+  border: 15px solid #FFCB05;
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+  width: 400px;
+  height: 550px;
+  margin: 20px;
+  display: inline-block;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  text-shadow: 1px 1px #000;
+  box-shadow: 2px 2px #000;
+}
+
+.title {
+  border-radius: 20px;
+  padding: 10px 20px;
+  position: absolute;
+  top: 0px;
+  left: 20px;
+  font-size: 48px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.delete {
+  background-color: #FF5555;
+  color: #FFF;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.delete:hover {
+  background-color: #FF7777;
+}
+
+.image-container {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.image-container img {
+  width: 300px;
+  height: auto;
+}
+
+.info {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #000;
+}
+
+.label {
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 20px;
+  color: #000;
+}
+
+.value {
+  font-size: 32px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #000;
+}
