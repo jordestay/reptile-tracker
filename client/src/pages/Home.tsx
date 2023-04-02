@@ -27,6 +27,7 @@ export const Home = () => {
         <div className="btn-info">ReptíDex</div>
         <div className="btn-mention">
           <span>Gotta track 'em all!</span>
+          <p>Herpetoculturist record-keeping for feedings, schedules, and husbandry.</p>
         </div>
         <div className="btn-group">
           <div className="btn ball">
