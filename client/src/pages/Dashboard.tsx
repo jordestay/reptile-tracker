@@ -68,53 +68,6 @@ export const Dashboard = () => {
   </div>
 };
 
-
-document.onmousemove = (event) => {
-  const e = event || window.event;
-      const $card = document.querySelector('.card');
-      const $pill = document.querySelector('.pill');
-      const $title = document.querySelector('.title');
-      const $delete = document.querySelector('.delete');
-      const $image = document.querySelector('.image-container');
-      const $info = document.querySelector('.info');
-
-      const x = (e.pageX - cumulativeOffset($card).left - ($card.offsetWidth / 2)) * -1 / 100;
-      const y = (e.pageY - cumulativeOffset($card).top - ($card.offsetHeight / 2)) * -1 / 100;
-
-      const matrix = [
-      [1, 0, 0, -x * 0.00005],
-      [0, 1, 0, -y * 0.00005],
-      [0, 0, 1, 1],
-      [0, 0, 0, 1]
-      ];
-
-      generateTranslate($pill, e, 0.03);
-      generateTranslate($title, e, 0.03);
-      generateTranslate($delete, e, 0.03);
-      generateTranslate($image, e, 0.03);
-      generateTranslate($info, e, 0.03);
-
-      $card.style.transform = `matrix3d(${matrix.toString()})`;
-};
-
-      function cumulativeOffset(element) {
-        let top = 0, left = 0;
-      do {
-        top += element.offsetTop || 0;
-      left += element.offsetLeft || 0;
-      element = element.offsetParent;
-  } while (element);
-
-      return {
-        top: top,
-      left: left
-  };
-}
-
-const generateTranslate = (el, e, value) => {
-        el.style.transform = `translate(${e.clientX * value}px, ${e.clientY * value}px)`;
-};
-
 const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
 const getDay = () => {
