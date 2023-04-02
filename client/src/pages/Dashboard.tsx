@@ -121,7 +121,7 @@ export const Dashboard = () => {
   let createCard = (
     <>
       <div className="card">
-        <div className="title"><a href={reptile.id}>{reptile.name}</a></div>
+        <div className="title"><a href="{reptile.id}">{reptile.name}</a></div>
         <button className="delete">X</button>
         <div className="image-container">
           <img src="https://via.placeholder.com/150x110" />
