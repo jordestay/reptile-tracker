@@ -1,36 +1,27 @@
-//-------------------------------------------------------------------------------------------------------------
-//
-//                                     D E S C R I P T I O N
-//
-//-------------------------------------------------------------------------------------------------------------
-/* TODO:
-- I should see all of the schedules for my user for the day of the week it is
-- I should see a list of all my reptiles
-- When selecting a reptile the app should navigate to the Reptile page
-- I should be able to create a new reptile (you can do this on this page via something like a pop up, or you can create a new page for this)
-- I should be able to delete a reptile.
-- I should be able to log out of my account
-*/
-//-------------------------------------------------------------------------------------------------------------
-//
-//                                     P S E U D O C O D E
-//
-//-------------------------------------------------------------------------------------------------------------
-/*
-for reptile in reptiles
-  create card
-    link to reptile page
-    add delete button
-  for schedule in schedules
-    if schedule.day == true
-      add schedule to card
-*/
-
 import { useEffect, useState } from "react";
-import { Reptile } from "./Reptile";
 import { useApi } from "../hooks/useApi";
 import { useNavigate, useParams } from "react-router-dom";
+import { Reptile } from "./Reptile";
 import './Dashboard.css'
+
+const [addingReptile, setAddingReptile] = useState(false);
+const [newReptile, setNewReptile] = useState<Reptile>({
+  name: "",
+  sex: "",
+  species: ""
+} as Reptile);
+
+useEffect(() => {
+  if (addingReptile) {
+    setNewReptile({ ...reptile });
+  } else {
+    setNewReptile({
+      name: "",
+      sex: "",
+      species: ""
+    } as Reptile);
+  }
+}, [addingReptile]);
 
 type Reptile = {
   name: string,
@@ -65,23 +56,28 @@ export const Dashboard = () => {
     species: ""
   } as Reptile);
 
-
-  async function authenticate() {
-    const resultBody = await api.get(`/users/user`);
-    console.log(resultBody);
-    console.log(resultBody.message)
-    if (resultBody.message === "unauthorized") {
-      console.log("unauthorized");
-      navigate('../login', { replace: true }); // navigates to a new page
-    }
-
-    setLoggedIn(true);
-  }
-
+  //-------------------------------------------------------------------------------------------------------------
+  //
+  //                                     S T A R T     U P
+  //
+  //-------------------------------------------------------------------------------------------------------------
   useEffect(() => {
     authenticate();
     getData();
   }, [])
+
+  //-------------------------------------------------------------------------------------------------------------
+  //
+  //                                     A U T H E N T I C A T E
+  //
+  //-------------------------------------------------------------------------------------------------------------
+  async function authenticate() {
+    const resultBody = await api.get(`/users/user`);
+    if (resultBody.message === "unauthorized") {
+      navigate('../login', { replace: true });
+    }
+    setLoggedIn(true);
+  }
 
   //-------------------------------------------------------------------------------------------------------------
   //
@@ -101,6 +97,16 @@ export const Dashboard = () => {
   //                                     P U L L     D A T A
   //
   //-------------------------------------------------------------------------------------------------------------
+  /*
+    for reptile in reptiles
+      create card
+        link to reptile page
+        add delete button
+      for schedule in schedules
+        if schedule.day == true
+          add schedule to card
+    add cards to screen
+*/
   async function getData() {
     const resultBody = await api.get(`/reptiles`);
     if (!id || isNaN(parseInt(id)) || id > resultBody.reptiles.length) {
@@ -121,7 +127,9 @@ export const Dashboard = () => {
   let createCard = (
     <>
       <div className="card">
+        {/* TODO: Add reptile id link */}
         <div className="title"><a href="{reptile.id}">{reptile.name}</a></div>
+        {/* TODO: Add delete functionality */}
         <button className="delete">X</button>
         <div className="image-container">
           <img src="https://via.placeholder.com/150x110" />
@@ -136,16 +144,6 @@ export const Dashboard = () => {
                     <div className='col'>
                       <h3>{schedule.type.toUpperCase()}&nbsp;</h3>
                       <p className='description'>{schedule.description}</p>
-                      <br></br>
-                    </div>
-                    <div className='row days'>
-                      <p className='day'>{schedule.monday ? "M" : ""}</p>
-                      <p className='day'>{schedule.tuesday ? "T" : ""}</p>
-                      <p className='day'>{schedule.wednesday ? "W" : ""}</p>
-                      <p className='day'>{schedule.thursday ? "T" : ""}</p>
-                      <p className='day'>{schedule.friday ? "F" : ""}</p>
-                      <p className='day'>{schedule.saturday ? "S" : ""}</p>
-                      <p className='day'>{schedule.sunday ? "S" : ""}</p>
                     </div>
                   </div>
                 </div>
@@ -159,6 +157,75 @@ export const Dashboard = () => {
 
   //-------------------------------------------------------------------------------------------------------------
   //
+  //                                     A D D    R E P T I L E
+  //
+  //-------------------------------------------------------------------------------------------------------------
+  /*
+      navigate to Reptile page and launch the "add reptile" form
+  */
+
+        //-------------------------------------------------------------------------------------------------------------
+  //
+  //                                     R E P T I L E     F O R M
+  //
+  //-------------------------------------------------------------------------------------------------------------
+  const updateReptileForm = (
+    <>
+      <div className='signUp' id='signUp'>
+        <div className='company'>
+          <h2>Update {reptile.name}</h2>
+        </div>
+        <p className='msg'>Please fill out the required information</p>
+        <div className='form'>
+          <form>
+            <input type="text" placeholder="Name" onChange={(e) => {
+              let updatedReptile = { ...newReptile };
+              updatedReptile.name = e.target.value;
+              setNewReptile(updatedReptile);
+            }} value={newReptile.name} className="text"></input>
+            <input type="text" placeholder="Sex" onChange={(e) => {
+              let updatedReptile = { ...newReptile };
+              updatedReptile.sex = e.target.value;
+              setNewReptile(updatedReptile);
+            }} value={newReptile.sex} className="text"></input>
+            <input type="text" placeholder="Species" onChange={(e) => {
+              let updatedReptile = { ...newReptile };
+              updatedReptile.species = e.target.value;
+              setNewReptile(updatedReptile);
+            }} value={newReptile.species} className="text final"></input>
+            <a onClick={() => editReptile()} className='btn-signUp' id='do-signUp'>Submit Changes</a>
+            <a className='forgot' onClick={() => setAddingReptile(false)}>Cancel</a>
+          </form>
+        </div>
+      </div>
+    </>
+  )
+
+    //-------------------------------------------------------------------------------------------------------------
+  //
+  //                                     E D I T     R E P T I L E
+  //
+  //-------------------------------------------------------------------------------------------------------------
+  async function editReptile() {
+    const editReptileBody = await api.put(`/reptiles/${id}`, newReptile);
+    if (editReptileBody.message === "Reptile updated.") {
+      const updatedReptile = editReptileBody.reptile;
+      setReptile(updatedReptile);
+      setAddingReptile(false);
+    }
+  }
+
+  //-------------------------------------------------------------------------------------------------------------
+  //
+  //                                     L O G O U T
+  //
+  //-------------------------------------------------------------------------------------------------------------
+  /*
+      sign out user, navigate to login page
+  */
+
+  //-------------------------------------------------------------------------------------------------------------
+  //
   //                                     V I E W     S C H E D U L E S
   //
   //-------------------------------------------------------------------------------------------------------------
@@ -167,10 +234,11 @@ export const Dashboard = () => {
       <div>
         <div className="topnav">
           <a href="#">Logout</a>
+          {/* TODO: Redirect to Reptile page to launch the "add reptile" form */}
           <a href="#">Create Reptile</a>
         </div>
-        <div className="btn-info">ReptíDex<br />{getDay()}'s Dashboard</div>
-
+        <div className="btn-info">ReptíDex<br />{getDay()}'s Dashboard</div>\
+        {/* TODO: for reptile in reptiles, display card */}
       </div>
     </>
   );
