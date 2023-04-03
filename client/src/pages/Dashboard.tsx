@@ -3,13 +3,7 @@ import { useApi } from "../hooks/useApi";
 import { useNavigate, useParams } from "react-router-dom";
 import './Dashboard.css'
 
-const [addingReptile, setAddingReptile] = useState(false);
 
-const [newReptile, setNewReptile] = useState<Reptile>({
-  name: "",
-  sex: "",
-  species: ""
-} as Reptile);
 
 type Reptile = {
   name: string,
@@ -32,6 +26,8 @@ type Schedule = {
 }
 
 export const Dashboard = () => {
+  const [addingReptile, setAddingReptile] = useState(false);
+
   const navigate = useNavigate();
   const api = useApi();
   const [loggedIn, setLoggedIn] = useState(false);
@@ -103,18 +99,18 @@ export const Dashboard = () => {
 */
   async function getData() {
     const resultBody = await api.get(`/reptiles`);
-    for (TODO: reptile in resultBody.reptiles) {
-        card = new createCard(reptile);
-        const schedules = await api.get(`/schedules/${reptile.id}`);
-        for (TODO: schedule in schedules) {
-            if schedule{getDay()} == true {
-                 card.add(schedule);
-            }
-        }
-    }
+    // for (TODO: reptile in resultBody.reptiles) {
+    //     card = new createCard(reptile);
+    //     const schedules = await api.get(`/schedules/${reptile.id}`);
+    //     for (TODO: schedule in schedules) {
+    //         if schedule{getDay()} == true {
+    //              card.add(schedule);
+    //         }
+    //     }
+    // }
 
-    const scheduleResultBody = await api.get(`/schedules/${id}`);
-    setSchedules(scheduleResultBody.schedules);
+    // const scheduleResultBody = await api.get(`/schedules/${id}`);
+    // setSchedules(scheduleResultBody.schedules);
   }
 
   //-------------------------------------------------------------------------------------------------------------
@@ -122,7 +118,7 @@ export const Dashboard = () => {
   //                                     C R E A T E     C A R D
   //
   //-------------------------------------------------------------------------------------------------------------
-  function createCard(reptile:Reptile) {
+  const createCard = (
     <>
       <div className="card">
         {/* TODO: Add reptile id link */}
@@ -151,7 +147,7 @@ export const Dashboard = () => {
         </div>
       </div>
     </>
-  }
+  );
 
   //-------------------------------------------------------------------------------------------------------------
   //
@@ -162,7 +158,7 @@ export const Dashboard = () => {
       navigate to Reptile page and launch the "add reptile" form
   */
 
-        //-------------------------------------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------------------------------------
   //
   //                                     R E P T I L E     F O R M
   //
@@ -199,7 +195,7 @@ export const Dashboard = () => {
     </>
   )
 
-    //-------------------------------------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------------------------------------
   //
   //                                     E D I T     R E P T I L E
   //
