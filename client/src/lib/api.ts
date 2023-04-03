@@ -1,6 +1,6 @@
 import { json } from "react-router-dom";
 
-type Method = "get" | "post" | "put" | "del";
+type Method = "get" | "post" | "put" | "delete";
 
 export class Api {
   // private token = "";
@@ -41,6 +41,6 @@ export class Api {
   }
 
   del(url: string) {
-    return this.makeRequest(url, 'del');
+    return this.makeRequest(url, 'delete');
   }
 }
