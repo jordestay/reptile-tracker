@@ -13,7 +13,6 @@ import { husbandriesController } from "./controllers/husbandry_controllers";
 import { schedulesController } from "./controllers/schedule_controllers";
 import cors from 'cors';
 import { engine } from "express-handlebars";
-import manifest from "./static/manifest.json";
 
 app.engine("hbs", engine({ extname: ".hbs" }));
 app.set("view engine", "hbs");
@@ -134,8 +133,7 @@ app.get("/*", (req: RequestWithSession, res) => {
   if (process.env.NODE_ENV === "production") {
     res.render("app", {
       development: false,
-      jsUrl: manifest["src/main.tsx"].file,
-      cssUrl: manifest["src/main.css"].file
+      // include manifest references here
     })
   } else {
     res.render("app", {

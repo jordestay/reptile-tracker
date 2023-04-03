@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 type Reptile = {
+  id: string
   name: string,
   species: string,
   sex: string
@@ -78,6 +79,15 @@ export const Reptile = () => {
     saturday: false,
     sunday: false,
   } as Schedule);
+
+  async function createReptile() {
+    const body = {
+      name: "ash",
+      species: "redtail_boa",
+      sex: "m"
+    }
+    await api.post(`/reptiles`, body);
+  }
 
   //-------------------------------------------------------------------------------------------------------------
   //
@@ -193,10 +203,20 @@ export const Reptile = () => {
   async function getData() {
     // pull reptiles and specify the current reptile
     const resultBody = await api.get(`/reptiles`);
-    if (!id || isNaN(parseInt(id)) || id > resultBody.reptiles.length) {
+    if (!id || isNaN(parseInt(id))) {
       navigate('../dashboard', { replace: true });
     } else {
-      setReptile(resultBody.reptiles[parseInt(id) - 1]);
+      let found = false;
+      for (let i = 0; i < resultBody.reptiles.length; i++) {
+        if (resultBody.reptiles[i].id == id) {
+          const theReptile = {...resultBody.reptiles[i]};
+          setReptile(theReptile);
+          found = true;
+        } 
+      }
+      if (!found) {
+        navigate('../dashboard', {replace: true});
+      }
     }
 
     // retrieve feedings from database
@@ -390,7 +410,7 @@ export const Reptile = () => {
               placeholder="Weight"
               onChange={(e) => {
                 let newHusbandry = { ...husbandry };
-                if (e.target.value === "") newHusbandry.length = 0;
+                if (e.target.value === "") newHusbandry.weight = 0;
                 else newHusbandry.weight = parseFloat(e.target.value);
                 setHusbandry(newHusbandry);
               }}
@@ -402,7 +422,7 @@ export const Reptile = () => {
               placeholder="Temperature"
               onChange={(e) => {
                 let newHusbandry = { ...husbandry };
-                if (e.target.value === "") newHusbandry.length = 0;
+                if (e.target.value === "") newHusbandry.temperature = 0;
                 else newHusbandry.temperature = parseFloat(e.target.value);
                 setHusbandry(newHusbandry);
               }}
@@ -414,7 +434,7 @@ export const Reptile = () => {
               placeholder="Humidity"
               onChange={(e) => {
                 let newHusbandry = { ...husbandry };
-                if (e.target.value === "") newHusbandry.length = 0;
+                if (e.target.value === "") newHusbandry.humidity = 0;
                 else newHusbandry.humidity = parseFloat(e.target.value);
                 setHusbandry(newHusbandry);
               }}
